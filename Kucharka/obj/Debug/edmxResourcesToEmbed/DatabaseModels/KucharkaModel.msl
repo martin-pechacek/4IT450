@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="KucharkaModelStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="KucharkaModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="id_user" ColumnName="id_user" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="firstname" ColumnName="firstname" />
+          <ScalarProperty Name="lastname" ColumnName="lastname" />
+          <ScalarProperty Name="user_right" ColumnName="user_right" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="KucharkaModel.User">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="KucharkaModel.Store.Insert_User">
+            <ScalarProperty Name="user_right" ParameterName="user_right" />
+            <ScalarProperty Name="lastname" ParameterName="lastname" />
+            <ScalarProperty Name="firstname" ParameterName="firstname" />
+            <ScalarProperty Name="password" ParameterName="password" />
+            <ScalarProperty Name="username" ParameterName="username" />
+            <ResultBinding Name="id_user" ColumnName="id_user" />
+          </InsertFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Insert_User" FunctionName="KucharkaModel.Store.Insert_User" />
+  </EntityContainerMapping>
+</Mapping>

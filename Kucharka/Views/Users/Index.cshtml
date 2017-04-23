@@ -1,0 +1,38 @@
+﻿@using Semestralka.Models;
+
+@model AddUserModel
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>Users</h2>
+
+@*Form for adding new user*@
+@using (Html.BeginForm("Index", "Users", FormMethod.Post))
+{
+    <div class="form-group">
+        @*Label and textbox for username*@
+        @Html.Label("Username")
+        @Html.TextBoxFor(m => m.username)
+
+        @*Label and textbox for password*@
+        @Html.Label("Password")
+        @Html.PasswordFor(m => m.password)
+
+        @*Label and textbox for firstname*@
+        @Html.Label("Firstname")
+        @Html.TextBoxFor(m => m.firstname)
+
+        @*Label and textbox for lastname*@
+        @Html.Label("Lastname")
+        @Html.TextBoxFor(m => m.lastname)
+
+        @*Label and textbox for user_right*@
+        @Html.Label("Edit users")
+        @Html.TextBoxFor(m => m.user_right)
+
+        @*Submit button*@
+        <input type="submit" value="Send" />
+    </div>
+}
