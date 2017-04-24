@@ -11,6 +11,8 @@
 @*Login form*@
 @using (Html.BeginForm("Login", "Users", FormMethod.Post))
 {
+    @Html.AntiForgeryToken();
+    
     <div class="form-group">
         @*Label and textbox for username*@
         @Html.LabelFor(m => m.username)

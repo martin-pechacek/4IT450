@@ -1,7 +1,11 @@
-﻿using Semestralka.DatabaseModels;
+﻿using Microsoft.AspNet.Identity;
+using Semestralka.DatabaseModels;
+using Semestralka.Models;
+using Semestralka.Other;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -48,9 +52,45 @@ namespace Semestralka.Controllers
             return View();
         }
 
-        public ActionResult Login() 
+        /**
+         *  Method for user login 
+        **/
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginModel model) 
         {
+            if(ModelState.IsValid)
+            {
+                //initialize new UserManager object
+                UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(new UserStore());
+
+                //find user
+                var user = await userManager.FindAsync(model.username, model.password);
+
+                //if user exists proceed login. If not, show error message
+                if(user != null)
+                {
+                    HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+
+                    var identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+
+                    HttpContext.GetOwinContext().Authentication.SignIn(identity);
+
+                    return RedirectToAction("Index", "Home");
+                } 
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Chybně zadané uživatelské jméno, nebo heslo");
+                }
+            }
             return View();
+        }
+
+        public ActionResult LogOff()
+        {
+            HttpContext.GetOwinContext().Authentication.SignOut();
+            return RedirectToAction("Index", "Home");
         }
 	}
 }
