@@ -21,6 +21,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    @*If user is logged in show link for log off. If not show login link*@
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @Html.ActionLink("Odhlásit se", "LogOff", "Users", null, new { @class = "navbar-link" })
+                    }
+                    else { 
+                        @Html.ActionLink("Login", "Login", "Users", null, new { @class = "navbar-link" })
+                    }
                 </ul>
             </div>
         </div>

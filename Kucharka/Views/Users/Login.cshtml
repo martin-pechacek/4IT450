@@ -1,0 +1,29 @@
+﻿@using Semestralka.Models;
+
+@model LoginModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+@*Login form*@
+@using (Html.BeginForm("Login", "Users", FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    
+    <div class="form-group">
+        @*Label and textbox for username*@
+        @Html.LabelFor(m => m.username)
+        @Html.TextBoxFor(m => m.username)
+
+        @*Label and textbox for username*@
+        @Html.LabelFor(m => m.password)
+        @Html.PasswordFor(m => m.password)
+
+        @*Login button*@
+        <input type="submit" value="Login"/>
+    </div>
+}
+
