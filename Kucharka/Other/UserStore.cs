@@ -29,11 +29,13 @@ namespace Semestralka.Other
        
             using (KucharkaEntities context = new KucharkaEntities())
             {
+                //parse userid from string to int
+                int id = int.Parse(userId);
                 //Find user by user id
-                User user = context.Users.Single(x => x.id_user == int.Parse(userId));
+                User user = context.Users.Single(x => x.id_user == id);
 
                 //Store id and username into identityUser variable
-                identityUser.Id = Convert.ToString(user.id_user);
+                identityUser.Id = userId;
                 identityUser.UserName = user.username;
             }
 
@@ -69,9 +71,26 @@ namespace Semestralka.Other
             throw new NotImplementedException();
         }
 
-        public Task<string> GetPasswordHashAsync(IdentityUser user)
+        public async Task<string> GetPasswordHashAsync(IdentityUser identityUser)
         {
-            return user.
+            await Task.Delay(0);
+
+            using (KucharkaEntities context = new KucharkaEntities())
+            {
+                //parse userid from string to int
+                int userId = int.Parse(identityUser.Id);
+
+                //Find user by user id
+                User user = context.Users.Single(x => x.id_user == userId);
+
+                //if user was found return hashed password
+                if (user != null)
+                {
+                    return user.password;
+                }
+
+                throw new ApplicationException("Invalid user");
+            }
         }
 
         public Task<bool> HasPasswordAsync(IdentityUser user)
@@ -81,18 +100,26 @@ namespace Semestralka.Other
 
         public Task SetPasswordHashAsync(IdentityUser user, string passwordHash)
         {
-            user.PasswordHash = passwordHash;
+            user.Password = passwordHash;
+
+            return Task.FromResult<Object>(null);
         }
 
-        private IdentityUser ToIdentityUser(IdentityUser user)
+        public async Task<string> GetSecurityStampAsync(IdentityUser user)
         {
-            return new IdentityUser
-            {
-                Id = user.Id,
-                PasswordHash = user.PasswordHash,
-                SecurityStamp = user.SecurityStamp,
-                UserName = user.UserName
-            };
+            await Task.Delay(0);
+
+            //if user exists return security stamp
+            if(user != null){
+                return Guid.NewGuid().ToString("D");
+            }
+
+            throw new ApplicationException("Invalid user.");
+        }
+
+        public Task SetSecurityStampAsync(IdentityUser user, string stamp)
+        {
+            throw new NotImplementedException();
         }
     }
 }

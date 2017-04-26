@@ -28,6 +28,9 @@ namespace Semestralka.Controllers
         {
             using(KucharkaEntities kucharkaEntities = new KucharkaEntities())
             {
+                IPasswordHasher hasher = new PasswordHasher();
+                user.password = hasher.HashPassword(user.password);
+
                 //sends data into database
                 kucharkaEntities.Users.Add(user);
                 //save changes in database
@@ -49,6 +52,15 @@ namespace Semestralka.Controllers
                         break;
                 }  
             }
+            return View();
+        }
+
+        /**
+        *  Method for login view initialization 
+        **/
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
             return View();
         }
 
@@ -84,7 +96,7 @@ namespace Semestralka.Controllers
                     ModelState.AddModelError(string.Empty, "Chybně zadané uživatelské jméno, nebo heslo");
                 }
             }
-            return View();
+            return View(model);
         }
 
         public ActionResult LogOff()
