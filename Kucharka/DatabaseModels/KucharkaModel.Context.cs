@@ -28,6 +28,11 @@ namespace Semestralka.DatabaseModels
         }
     
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Ingredient> Ingredients { get; set; }
+        public virtual DbSet<Recipe> Recipes { get; set; }
+        public virtual DbSet<Recipe_Step> Recipe_Step { get; set; }
+        public virtual DbSet<Recipe_Step_Ingredients> Recipe_Step_Ingredients { get; set; }
     
         public virtual int Insert_User(string username, string password, string firstname, string lastname, Nullable<bool> user_right)
         {
@@ -52,6 +57,15 @@ namespace Semestralka.DatabaseModels
                 new ObjectParameter("user_right", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Insert_User", usernameParameter, passwordParameter, firstnameParameter, lastnameParameter, user_rightParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> Insert_Category(string name_category)
+        {
+            var name_categoryParameter = name_category != null ?
+                new ObjectParameter("name_category", name_category) :
+                new ObjectParameter("name_category", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Insert_Category", name_categoryParameter);
         }
     }
 }

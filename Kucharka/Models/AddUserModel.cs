@@ -7,9 +7,7 @@ using System.Web;
 namespace Semestralka.Models
 {
     public class AddUserModel
-    {
-        public int id_user { get; set; }
-        
+    {       
         [Required]
         public string username { get; set; }
 

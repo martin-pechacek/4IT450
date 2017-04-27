@@ -26,5 +26,58 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="Insert_User" FunctionName="KucharkaModel.Store.Insert_User" />
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="KucharkaModel.Category">
+        <MappingFragment StoreEntitySet="Category">
+          <ScalarProperty Name="name_category" ColumnName="name_category" />
+          <ScalarProperty Name="id_category" ColumnName="id_category" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="KucharkaModel.Category">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="KucharkaModel.Store.Insert_Category">
+            <ScalarProperty Name="name_category" ParameterName="name_category" />
+            <ResultBinding Name="id_category" ColumnName="id_category" />
+          </InsertFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ingredients">
+      <EntityTypeMapping TypeName="KucharkaModel.Ingredient">
+        <MappingFragment StoreEntitySet="Ingredient">
+          <ScalarProperty Name="unit" ColumnName="unit" />
+          <ScalarProperty Name="name_ingredient" ColumnName="name_ingredient" />
+          <ScalarProperty Name="id_ingredient" ColumnName="id_ingredient" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Recipes">
+      <EntityTypeMapping TypeName="KucharkaModel.Recipe">
+        <MappingFragment StoreEntitySet="Recipe">
+          <ScalarProperty Name="name_recipe" ColumnName="name_recipe" />
+          <ScalarProperty Name="id_category" ColumnName="id_category" />
+          <ScalarProperty Name="id_recipe" ColumnName="id_recipe" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Recipe_Step">
+      <EntityTypeMapping TypeName="KucharkaModel.Recipe_Step">
+        <MappingFragment StoreEntitySet="Recipe_Step">
+          <ScalarProperty Name="instruction" ColumnName="instruction" />
+          <ScalarProperty Name="id_recipe" ColumnName="id_recipe" />
+          <ScalarProperty Name="step_number" ColumnName="step_number" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Recipe_Step_Ingredients">
+      <EntityTypeMapping TypeName="KucharkaModel.Recipe_Step_Ingredients">
+        <MappingFragment StoreEntitySet="Recipe_Step_Ingredients">
+          <ScalarProperty Name="amout_required" ColumnName="amout_required" />
+          <ScalarProperty Name="id_ingredient" ColumnName="id_ingredient" />
+          <ScalarProperty Name="step_number" ColumnName="step_number" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Insert_Category" FunctionName="KucharkaModel.Store.Insert_Category" />
   </EntityContainerMapping>
 </Mapping>

@@ -1,5 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="KucharkaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="id_category" />
+    </Key>
+    <Property Name="id_category" Type="smallint" Nullable="false" />
+    <Property Name="name_category" Type="varchar" MaxLength="128" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ingredient">
+    <Key>
+      <PropertyRef Name="id_ingredient" />
+    </Key>
+    <Property Name="id_ingredient" Type="smallint" Nullable="false" />
+    <Property Name="name_ingredient" Type="varchar" MaxLength="512" Nullable="false" />
+    <Property Name="unit" Type="varchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Recipe">
+    <Key>
+      <PropertyRef Name="id_recipe" />
+    </Key>
+    <Property Name="id_recipe" Type="smallint" Nullable="false" />
+    <Property Name="id_category" Type="smallint" Nullable="false" />
+    <Property Name="name_recipe" Type="varchar" MaxLength="1024" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Recipe_Step">
+    <Key>
+      <PropertyRef Name="step_number" />
+    </Key>
+    <Property Name="step_number" Type="smallint" Nullable="false" />
+    <Property Name="id_recipe" Type="smallint" Nullable="false" />
+    <Property Name="instruction" Type="varchar" MaxLength="2048" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Recipe_Step_Ingredients">
+    <Key>
+      <PropertyRef Name="step_number" />
+      <PropertyRef Name="id_ingredient" />
+    </Key>
+    <Property Name="step_number" Type="smallint" Nullable="false" />
+    <Property Name="id_ingredient" Type="smallint" Nullable="false" />
+    <Property Name="amout_required" Type="int" />
+  </EntityType>
   <EntityType Name="User">
     <Key>
       <PropertyRef Name="id_user" />
@@ -11,6 +53,57 @@
     <Property Name="lastname" Type="varchar" MaxLength="128" Nullable="false" />
     <Property Name="user_right" Type="bit" Nullable="false" />
   </EntityType>
+  <Association Name="FK_RECIPE_RELATIONS_CATEGORY">
+    <End Role="Category" Type="Self.Category" Multiplicity="1" />
+    <End Role="Recipe" Type="Self.Recipe" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="id_category" />
+      </Principal>
+      <Dependent Role="Recipe">
+        <PropertyRef Name="id_category" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RECIPE_S_RELATIONS_INGREDIE">
+    <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="1" />
+    <End Role="Recipe_Step_Ingredients" Type="Self.Recipe_Step_Ingredients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ingredient">
+        <PropertyRef Name="id_ingredient" />
+      </Principal>
+      <Dependent Role="Recipe_Step_Ingredients">
+        <PropertyRef Name="id_ingredient" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RECIPE_S_RELATIONS_RECIPE">
+    <End Role="Recipe" Type="Self.Recipe" Multiplicity="1" />
+    <End Role="Recipe_Step" Type="Self.Recipe_Step" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Recipe">
+        <PropertyRef Name="id_recipe" />
+      </Principal>
+      <Dependent Role="Recipe_Step">
+        <PropertyRef Name="id_recipe" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RECIPE_S_RELATIONS_RECIPE_S">
+    <End Role="Recipe_Step" Type="Self.Recipe_Step" Multiplicity="1" />
+    <End Role="Recipe_Step_Ingredients" Type="Self.Recipe_Step_Ingredients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Recipe_Step">
+        <PropertyRef Name="step_number" />
+      </Principal>
+      <Dependent Role="Recipe_Step_Ingredients">
+        <PropertyRef Name="step_number" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="Insert_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="name_category" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="Insert_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="username" Type="varchar" Mode="In" />
     <Parameter Name="password" Type="varchar" Mode="In" />
@@ -19,6 +112,33 @@
     <Parameter Name="user_right" Type="bit" Mode="In" />
   </Function>
   <EntityContainer Name="KucharkaModelStoreContainer">
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Recipe" EntityType="Self.Recipe" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Recipe_Step" EntityType="Self.Recipe_Step" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Recipe_Step_Ingredients" EntityType="Self.Recipe_Step_Ingredients" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Recipe_Step_Ingredients].[step_number] AS [step_number], 
+    [Recipe_Step_Ingredients].[id_ingredient] AS [id_ingredient], 
+    [Recipe_Step_Ingredients].[amout_required] AS [amout_required]
+    FROM [dbo].[Recipe_Step_Ingredients] AS [Recipe_Step_Ingredients]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_RECIPE_RELATIONS_CATEGORY" Association="Self.FK_RECIPE_RELATIONS_CATEGORY">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Recipe" EntitySet="Recipe" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RECIPE_S_RELATIONS_INGREDIE" Association="Self.FK_RECIPE_S_RELATIONS_INGREDIE">
+      <End Role="Ingredient" EntitySet="Ingredient" />
+      <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE" Association="Self.FK_RECIPE_S_RELATIONS_RECIPE">
+      <End Role="Recipe" EntitySet="Recipe" />
+      <End Role="Recipe_Step" EntitySet="Recipe_Step" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE_S" Association="Self.FK_RECIPE_S_RELATIONS_RECIPE_S">
+      <End Role="Recipe_Step" EntitySet="Recipe_Step" />
+      <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
+    </AssociationSet>
   </EntityContainer>
 </Schema>

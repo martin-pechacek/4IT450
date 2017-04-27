@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
@@ -21,14 +21,26 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*If user is logged in show link for log off. If not show login link*@
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        @Html.ActionLink("Odhlásit se", "LogOff", "Users", null, new { @class = "navbar-link" })
-                    }
-                    else { 
-                        @Html.ActionLink("Login", "Login", "Users", null, new { @class = "navbar-link" })
-                    }
+                    <li class="nav-item">
+                        @*If user is logged in show link for log off. If not show login link*@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @Html.ActionLink("Odhlásit se", "LogOff", "Users", null, new { @class = "navbar-link" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Login", "Login", "Users", null, new { @class = "navbar-link" })
+                        }
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Recipes <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                @Html.ActionLink("Kategorie", "Index", "Categories", null, new { @class = "navbar-link" })
+                            </li>
+                            <li><a href="#">Another action</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
