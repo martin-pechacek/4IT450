@@ -44,6 +44,9 @@
     <FunctionImport Name="Insert_Category" ReturnType="Collection(Int32)">
       <Parameter Name="name_category" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="category_Delete">
+      <Parameter Name="name_category" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="Category">
     <Key>

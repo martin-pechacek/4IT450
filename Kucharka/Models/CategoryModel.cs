@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Semestralka.Models
 {
-    public class AddCategoryModel
+    public class CategoryModel
     {
         [Required]
         [Display(Name = "Kategorie")]

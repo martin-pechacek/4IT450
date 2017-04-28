@@ -9,14 +9,14 @@
           <Key>
             <PropertyRef Name="id_category" />
           </Key>
-          <Property Name="id_category" Type="smallint" Nullable="false" />
+          <Property Name="id_category" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name_category" Type="varchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="Ingredient">
           <Key>
             <PropertyRef Name="id_ingredient" />
           </Key>
-          <Property Name="id_ingredient" Type="smallint" Nullable="false" />
+          <Property Name="id_ingredient" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name_ingredient" Type="varchar" MaxLength="512" Nullable="false" />
           <Property Name="unit" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
@@ -24,7 +24,7 @@
           <Key>
             <PropertyRef Name="id_recipe" />
           </Key>
-          <Property Name="id_recipe" Type="smallint" Nullable="false" />
+          <Property Name="id_recipe" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_category" Type="smallint" Nullable="false" />
           <Property Name="name_recipe" Type="varchar" MaxLength="1024" Nullable="false" />
         </EntityType>
@@ -106,6 +106,9 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="category_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name_category" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="Insert_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="name_category" Type="varchar" Mode="In" />
         </Function>
@@ -192,6 +195,9 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
             <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
           </AssociationSet>
           <FunctionImport Name="Insert_Category" ReturnType="Collection(Int32)">
+          <Parameter Name="name_category" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="category_Delete">
             <Parameter Name="name_category" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -335,6 +341,9 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
                   <ScalarProperty Name="name_category" ParameterName="name_category" />
                   <ResultBinding Name="id_category" ColumnName="id_category" />
                 </InsertFunction>
+                <DeleteFunction FunctionName="KucharkaModel.Store.category_Delete">
+                  <ScalarProperty Name="name_category" ParameterName="name_category" />
+                </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -375,6 +384,7 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="Insert_Category" FunctionName="KucharkaModel.Store.Insert_Category" />
+          <FunctionImportMapping FunctionImportName="category_Delete" FunctionName="KucharkaModel.Store.category_Delete" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

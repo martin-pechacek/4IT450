@@ -118,8 +118,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="ClassDiagram1.cd" />
+    <Content Include="Fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Fonts\glyphicons-halflings-regular.woff" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -171,10 +175,11 @@
     <Compile Include="DatabaseModels\User.cs">
       <DependentUpon>KucharkaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataObjects\CategoryDO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AddCategoryModel.cs" />
+    <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\AddUserModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Other\IdentityUser.cs" />

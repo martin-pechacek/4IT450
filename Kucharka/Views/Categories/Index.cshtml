@@ -1,6 +1,7 @@
 ﻿@using Semestralka.Models;
+@using Semestralka.DataObjects;
 
-@model AddCategoryModel
+@model CategoryModel
 
 @{
     ViewBag.Title = "Kategorie";
@@ -18,4 +19,24 @@
         @*Add button*@
         <input type="submit" value="Přidat" />
     </div>
+    
+    if (ViewBag.Categories != null) 
+    {
+    @*List of categories*@
+    <table class="table">
+           <tbody>
+               @foreach (CategoryDO category in ViewBag.categories)
+               {
+                   <tr>
+                       <td>@category.CategoryName</td>
+                       <td>
+                           <a href="@Url.Action("Remove", "Categories", new { categoryName = @category.CategoryName })">
+                               <span class="glyphicon glyphicon-remove" ></span>
+                           </a>
+                       </td>
+                   </tr>
+               }
+           </tbody>
+       </table>
+    }
 }

@@ -39,6 +39,9 @@
             <ScalarProperty Name="name_category" ParameterName="name_category" />
             <ResultBinding Name="id_category" ColumnName="id_category" />
           </InsertFunction>
+          <DeleteFunction FunctionName="KucharkaModel.Store.category_Delete">
+            <ScalarProperty Name="name_category" ParameterName="name_category" />
+          </DeleteFunction>
         </ModificationFunctionMapping>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -79,5 +82,6 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="Insert_Category" FunctionName="KucharkaModel.Store.Insert_Category" />
+    <FunctionImportMapping FunctionImportName="category_Delete" FunctionName="KucharkaModel.Store.category_Delete" />
   </EntityContainerMapping>
 </Mapping>

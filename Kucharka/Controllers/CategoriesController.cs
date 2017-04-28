@@ -1,7 +1,10 @@
 ﻿using Semestralka.DatabaseModels;
+using Semestralka.DataObjects;
+using Semestralka.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -11,17 +14,23 @@ namespace Semestralka.Controllers
     {
         //
         // GET: /Categories/
-        public ActionResult Index()
+        public async Task<ActionResult> Index(CategoryModel model)
         {
-            return View();
+            List<CategoryDO> categories = await CategoryDO.GetCategoriesAsync();
+
+            ViewBag.Categories = categories;
+
+            return View(model);
         }
 
         /**
         *  Method for inserting new category into database
         **/
         [HttpPost]
-        public ActionResult Index(Category category)
+        public async Task<ActionResult> Index(Category category)
         {
+            await Task.Delay(0);
+
             using (KucharkaEntities kucharkaEntities = new KucharkaEntities())
             {
                 //sends data into database
@@ -42,7 +51,25 @@ namespace Semestralka.Controllers
                         break;
                 }
             }
-            return View();
+            return RedirectToAction("Index", "Categories");
+        }
+
+        public async Task<ActionResult> Remove(string categoryName)
+        {
+            await Task.Delay(0);
+            
+            using (KucharkaEntities context =
+                new KucharkaEntities())
+            {
+                //find category
+                var category = context.Categories.Single(x => x.name_category == categoryName);
+                //remove category in db
+                context.Categories.Remove(category);
+                //save change in db
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "Categories");
         }
 	}
 }

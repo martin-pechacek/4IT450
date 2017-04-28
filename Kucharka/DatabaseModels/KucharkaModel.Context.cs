@@ -67,5 +67,14 @@ namespace Semestralka.DatabaseModels
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Insert_Category", name_categoryParameter);
         }
+    
+        public virtual int category_Delete(string name_category)
+        {
+            var name_categoryParameter = name_category != null ?
+                new ObjectParameter("name_category", name_category) :
+                new ObjectParameter("name_category", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("category_Delete", name_categoryParameter);
+        }
     }
 }
