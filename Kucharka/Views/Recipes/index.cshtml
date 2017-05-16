@@ -1,0 +1,33 @@
+﻿@using Semestralka.Models;
+@using Semestralka.DataObjects;
+
+@model RecipeModel
+
+@{
+    ViewBag.Title = "Recepty";
+}
+
+<h2>Recepty</h2>
+
+@using (Html.BeginForm("Index", "Recipes", FormMethod.Post))
+{
+    <div class="form-group">
+        @*Label and textbox for recipe name*@
+        @Html.LabelFor(m => m.name_recipe)
+        @Html.TextBoxFor(m => m.name_recipe)
+
+        @*Dropdown for category*@
+        @Html.DropDownListFor(m => m.id_category, (List<SelectListItem>)ViewBag.CategoryList,
+            new
+            {
+                @class = "form-control input-sm",
+                onchange = "$(this).closest('form').submit();"
+            })
+        
+        @Html.TextAreaFor(m => m.instructions, 10, 70, null)
+
+       
+         @*Add button*@
+        <input type="submit" value="Přidat" />
+    </div>
+}

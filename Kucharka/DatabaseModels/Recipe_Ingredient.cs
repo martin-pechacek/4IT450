@@ -12,18 +12,13 @@ namespace Semestralka.DatabaseModels
     using System;
     using System.Collections.Generic;
     
-    public partial class Recipe_Step
+    public partial class Recipe_Ingredient
     {
-        public Recipe_Step()
-        {
-            this.Recipe_Step_Ingredients = new HashSet<Recipe_Step_Ingredients>();
-        }
-    
-        public short step_number { get; set; }
         public short id_recipe { get; set; }
-        public string instruction { get; set; }
+        public short id_ingredient { get; set; }
+        public int amount { get; set; }
     
+        public virtual Ingredient Ingredient { get; set; }
         public virtual Recipe Recipe { get; set; }
-        public virtual ICollection<Recipe_Step_Ingredients> Recipe_Step_Ingredients { get; set; }
     }
 }

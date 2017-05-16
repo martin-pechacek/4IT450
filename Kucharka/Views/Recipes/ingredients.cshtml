@@ -1,0 +1,25 @@
+﻿@using Semestralka.Models;
+
+@model IngredientModel
+
+@{
+    ViewBag.Title = "Ingredients";
+}
+
+<h2>Ingredients</h2>
+
+@using (Html.BeginForm("Ingredients", "Recipes", FormMethod.Post))
+{
+    <div class="form-group">
+        @*Label and textbox for recipe name*@
+        @Html.LabelFor(m => m.name_ingredient)
+        @Html.TextBoxFor(m => m.name_ingredient)
+
+        @*Label and textbox for unit*@
+        @Html.LabelFor(m => m.unit)
+        @Html.TextBoxFor(m => m.unit)
+
+        @*Add button*@
+        <input type="submit" value="Přidat" />
+    </div>
+}

@@ -26,7 +26,7 @@ namespace Semestralka.Controllers
         [HttpPost]
         public ActionResult Index(User user)
         {
-            using(KucharkaEntities kucharkaEntities = new KucharkaEntities())
+            using(Entities kucharkaEntities = new Entities())
             {
                 IPasswordHasher hasher = new PasswordHasher();
                 user.password = hasher.HashPassword(user.password);

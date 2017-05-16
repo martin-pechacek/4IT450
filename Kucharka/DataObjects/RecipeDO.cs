@@ -8,21 +8,24 @@ using System.Data.Entity;
 
 namespace Semestralka.DataObjects
 {
-    public class CategoryDO
+    public class RecipeDO
     {
-        public string CategoryName { get; set; }
+        public string RecipeName { get; set; }
         public int CategoryID { get; set; }
+        public string Instructions { get; set; }
 
-        public static async Task<List<CategoryDO>> GetCategoriesAsync()
+        public static async Task<List<RecipeDO>> GetRecipeAsync(int id)
         {
             using (Entities context =
                 new Entities())
             {
-                return await context.Categories
-                    .Select(x => new CategoryDO()
+                return await context.Recipes
+                  .Where(x => x.id_recipe == id)
+                  .Select(x => new RecipeDO()
                     {
+                        RecipeName = x.name_recipe,
                         CategoryID = x.id_category,
-                        CategoryName = x.name_category
+                        Instructions = x.instructions
                     }).ToListAsync();
             }
         }

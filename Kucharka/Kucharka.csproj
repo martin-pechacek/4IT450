@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\site.css" />
     <Content Include="Fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="ClassDiagram1.cd" />
@@ -141,6 +142,7 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RecipesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DatabaseModels\Category.cs">
       <DependentUpon>KucharkaModel.tt</DependentUpon>
@@ -166,22 +168,22 @@
     <Compile Include="DatabaseModels\Recipe.cs">
       <DependentUpon>KucharkaModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseModels\Recipe_Step.cs">
-      <DependentUpon>KucharkaModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DatabaseModels\Recipe_Step_Ingredients.cs">
+    <Compile Include="DatabaseModels\Recipe_Ingredient.cs">
       <DependentUpon>KucharkaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DatabaseModels\User.cs">
       <DependentUpon>KucharkaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DataObjects\CategoryDO.cs" />
+    <Compile Include="DataObjects\RecipeDO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\AddUserModel.cs" />
+    <Compile Include="Models\IngredientModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\RecipeModel.cs" />
     <Compile Include="Other\IdentityUser.cs" />
     <Compile Include="Other\UserStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -213,6 +215,9 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Login.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Recipes\index.cshtml" />
+    <Content Include="Views\Recipes\Ingredients.cshtml" />
+    <Content Include="Views\Recipes\Recipe.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

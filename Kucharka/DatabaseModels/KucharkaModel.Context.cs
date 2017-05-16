@@ -15,9 +15,9 @@ namespace Semestralka.DatabaseModels
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class KucharkaEntities : DbContext
+    public partial class Entities : DbContext
     {
-        public KucharkaEntities()
+        public Entities()
             : base("name=Entities")
         {
         }
@@ -31,8 +31,7 @@ namespace Semestralka.DatabaseModels
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Ingredient> Ingredients { get; set; }
         public virtual DbSet<Recipe> Recipes { get; set; }
-        public virtual DbSet<Recipe_Step> Recipe_Step { get; set; }
-        public virtual DbSet<Recipe_Step_Ingredients> Recipe_Step_Ingredients { get; set; }
+        public virtual DbSet<Recipe_Ingredient> Recipe_Ingredient { get; set; }
     
         public virtual int Insert_User(string username, string password, string firstname, string lastname, Nullable<bool> user_right)
         {
@@ -75,6 +74,36 @@ namespace Semestralka.DatabaseModels
                 new ObjectParameter("name_category", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("category_Delete", name_categoryParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> Insert_Recipe(string name_recipe, Nullable<short> id_category, string instructions)
+        {
+            var name_recipeParameter = name_recipe != null ?
+                new ObjectParameter("name_recipe", name_recipe) :
+                new ObjectParameter("name_recipe", typeof(string));
+    
+            var id_categoryParameter = id_category.HasValue ?
+                new ObjectParameter("id_category", id_category) :
+                new ObjectParameter("id_category", typeof(short));
+    
+            var instructionsParameter = instructions != null ?
+                new ObjectParameter("instructions", instructions) :
+                new ObjectParameter("instructions", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Insert_Recipe", name_recipeParameter, id_categoryParameter, instructionsParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> Insert_Ingredient(string name_ingredient, string unit)
+        {
+            var name_ingredientParameter = name_ingredient != null ?
+                new ObjectParameter("name_ingredient", name_ingredient) :
+                new ObjectParameter("name_ingredient", typeof(string));
+    
+            var unitParameter = unit != null ?
+                new ObjectParameter("unit", unit) :
+                new ObjectParameter("unit", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Insert_Ingredient", name_ingredientParameter, unitParameter);
         }
     }
 }

@@ -22,31 +22,22 @@
     <Property Name="id_recipe" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="id_category" Type="smallint" Nullable="false" />
     <Property Name="name_recipe" Type="varchar" MaxLength="1024" Nullable="false" />
+    <Property Name="instructions" Type="varchar" MaxLength="2048" Nullable="false" />
   </EntityType>
-  <EntityType Name="Recipe_Step">
+  <EntityType Name="Relationship_2">
     <Key>
-      <PropertyRef Name="step_number" />
-    </Key>
-    <Property Name="step_number" Type="smallint" Nullable="false" />
-    <Property Name="id_recipe" Type="smallint" Nullable="false" />
-    <Property Name="instruction" Type="varchar" MaxLength="2048" Nullable="false" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="Recipe_Step_Ingredients">
-    <Key>
-      <PropertyRef Name="step_number" />
+      <PropertyRef Name="id_recipe" />
       <PropertyRef Name="id_ingredient" />
     </Key>
-    <Property Name="step_number" Type="smallint" Nullable="false" />
+    <Property Name="id_recipe" Type="smallint" Nullable="false" />
     <Property Name="id_ingredient" Type="smallint" Nullable="false" />
-    <Property Name="amout_required" Type="int" />
+    <Property Name="amount" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="User">
     <Key>
       <PropertyRef Name="id_user" />
     </Key>
-    <Property Name="id_user" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_user" Type="smallint" Nullable="false" />
     <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="password" Type="varchar" MaxLength="1024" Nullable="false" />
     <Property Name="firstname" Type="varchar" MaxLength="128" Nullable="false" />
@@ -65,39 +56,27 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_RECIPE_S_RELATIONS_INGREDIE">
+  <Association Name="FK_RELATION_RELATIONS_INGREDIE">
     <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="1" />
-    <End Role="Recipe_Step_Ingredients" Type="Self.Recipe_Step_Ingredients" Multiplicity="*" />
+    <End Role="Relationship_2" Type="Self.Relationship_2" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Ingredient">
         <PropertyRef Name="id_ingredient" />
       </Principal>
-      <Dependent Role="Recipe_Step_Ingredients">
+      <Dependent Role="Relationship_2">
         <PropertyRef Name="id_ingredient" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_RECIPE_S_RELATIONS_RECIPE">
+  <Association Name="FK_RELATION_RELATIONS_RECIPE">
     <End Role="Recipe" Type="Self.Recipe" Multiplicity="1" />
-    <End Role="Recipe_Step" Type="Self.Recipe_Step" Multiplicity="*" />
+    <End Role="Relationship_2" Type="Self.Relationship_2" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Recipe">
         <PropertyRef Name="id_recipe" />
       </Principal>
-      <Dependent Role="Recipe_Step">
+      <Dependent Role="Relationship_2">
         <PropertyRef Name="id_recipe" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_RECIPE_S_RELATIONS_RECIPE_S">
-    <End Role="Recipe_Step" Type="Self.Recipe_Step" Multiplicity="1" />
-    <End Role="Recipe_Step_Ingredients" Type="Self.Recipe_Step_Ingredients" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Recipe_Step">
-        <PropertyRef Name="step_number" />
-      </Principal>
-      <Dependent Role="Recipe_Step_Ingredients">
-        <PropertyRef Name="step_number" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -106,6 +85,15 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
   </Function>
   <Function Name="Insert_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="name_category" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="Insert_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="name_ingredient" Type="varchar" Mode="In" />
+    <Parameter Name="unit" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="Insert_Recipe" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="name_recipe" Type="varchar" Mode="In" />
+    <Parameter Name="id_category" Type="smallint" Mode="In" />
+    <Parameter Name="instructions" Type="varchar" Mode="In" />
   </Function>
   <Function Name="Insert_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="username" Type="varchar" Mode="In" />
@@ -118,30 +106,19 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Recipe" EntityType="Self.Recipe" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Recipe_Step" EntityType="Self.Recipe_Step" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Relationship_2" EntityType="Self.Relationship_2" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Recipe_Step_Ingredients" EntityType="Self.Recipe_Step_Ingredients" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [Recipe_Step_Ingredients].[step_number] AS [step_number], 
-    [Recipe_Step_Ingredients].[id_ingredient] AS [id_ingredient], 
-    [Recipe_Step_Ingredients].[amout_required] AS [amout_required]
-    FROM [dbo].[Recipe_Step_Ingredients] AS [Recipe_Step_Ingredients]</DefiningQuery>
-    </EntitySet>
     <AssociationSet Name="FK_RECIPE_RELATIONS_CATEGORY" Association="Self.FK_RECIPE_RELATIONS_CATEGORY">
       <End Role="Category" EntitySet="Category" />
       <End Role="Recipe" EntitySet="Recipe" />
     </AssociationSet>
-    <AssociationSet Name="FK_RECIPE_S_RELATIONS_INGREDIE" Association="Self.FK_RECIPE_S_RELATIONS_INGREDIE">
+    <AssociationSet Name="FK_RELATION_RELATIONS_INGREDIE" Association="Self.FK_RELATION_RELATIONS_INGREDIE">
       <End Role="Ingredient" EntitySet="Ingredient" />
-      <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
+      <End Role="Relationship_2" EntitySet="Relationship_2" />
     </AssociationSet>
-    <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE" Association="Self.FK_RECIPE_S_RELATIONS_RECIPE">
+    <AssociationSet Name="FK_RELATION_RELATIONS_RECIPE" Association="Self.FK_RELATION_RELATIONS_RECIPE">
       <End Role="Recipe" EntitySet="Recipe" />
-      <End Role="Recipe_Step" EntitySet="Recipe_Step" />
-    </AssociationSet>
-    <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE_S" Association="Self.FK_RECIPE_S_RELATIONS_RECIPE_S">
-      <End Role="Recipe_Step" EntitySet="Recipe_Step" />
-      <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
+      <End Role="Relationship_2" EntitySet="Relationship_2" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

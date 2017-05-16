@@ -38,7 +38,12 @@
                             <li>
                                 @Html.ActionLink("Kategorie", "Index", "Categories", null, new { @class = "navbar-link" })
                             </li>
-                            <li><a href="#">Another action</a></li>
+                            <li>
+                                @Html.ActionLink("Recepty", "Index", "Recipes", null, new { @class = "navbar-link" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Ingredience", "Ingredients", "Recipes", null, new { @class = "navbar-link" })
+                            </li>
                         </ul>
                     </li>
                 </ul>

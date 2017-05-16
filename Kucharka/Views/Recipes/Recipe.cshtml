@@ -1,0 +1,22 @@
+﻿@using Semestralka.DataObjects;
+
+@{
+    ViewBag.Title = "Recipe";
+}
+
+<h2>Recipe</h2>
+
+@*Recipe*@
+<table class="table">
+    <tbody>
+        @foreach (RecipeDO recipe in ViewBag.Recipe)
+        {
+            <tr>
+                <td>@recipe.RecipeName</td>
+                <td>@recipe.CategoryID</td>
+                <td>@recipe.Instructions</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

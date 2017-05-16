@@ -27,31 +27,22 @@
           <Property Name="id_recipe" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_category" Type="smallint" Nullable="false" />
           <Property Name="name_recipe" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="instructions" Type="varchar" MaxLength="2048" Nullable="false" />
         </EntityType>
-        <EntityType Name="Recipe_Step">
+        <EntityType Name="Relationship_2">
           <Key>
-            <PropertyRef Name="step_number" />
-          </Key>
-          <Property Name="step_number" Type="smallint" Nullable="false" />
-          <Property Name="id_recipe" Type="smallint" Nullable="false" />
-          <Property Name="instruction" Type="varchar" MaxLength="2048" Nullable="false" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="Recipe_Step_Ingredients">
-          <Key>
-            <PropertyRef Name="step_number" />
+            <PropertyRef Name="id_recipe" />
             <PropertyRef Name="id_ingredient" />
           </Key>
-          <Property Name="step_number" Type="smallint" Nullable="false" />
+          <Property Name="id_recipe" Type="smallint" Nullable="false" />
           <Property Name="id_ingredient" Type="smallint" Nullable="false" />
-          <Property Name="amout_required" Type="int" />
+          <Property Name="amount" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="id_user" />
           </Key>
-          <Property Name="id_user" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_user" Type="smallint" Nullable="false" />
           <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="1024" Nullable="false" />
           <Property Name="firstname" Type="varchar" MaxLength="128" Nullable="false" />
@@ -70,39 +61,27 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_RECIPE_S_RELATIONS_INGREDIE">
+        <Association Name="FK_RELATION_RELATIONS_INGREDIE">
           <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="1" />
-          <End Role="Recipe_Step_Ingredients" Type="Self.Recipe_Step_Ingredients" Multiplicity="*" />
+          <End Role="Relationship_2" Type="Self.Relationship_2" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Ingredient">
               <PropertyRef Name="id_ingredient" />
             </Principal>
-            <Dependent Role="Recipe_Step_Ingredients">
+            <Dependent Role="Relationship_2">
               <PropertyRef Name="id_ingredient" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_RECIPE_S_RELATIONS_RECIPE">
+        <Association Name="FK_RELATION_RELATIONS_RECIPE">
           <End Role="Recipe" Type="Self.Recipe" Multiplicity="1" />
-          <End Role="Recipe_Step" Type="Self.Recipe_Step" Multiplicity="*" />
+          <End Role="Relationship_2" Type="Self.Relationship_2" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Recipe">
               <PropertyRef Name="id_recipe" />
             </Principal>
-            <Dependent Role="Recipe_Step">
+            <Dependent Role="Relationship_2">
               <PropertyRef Name="id_recipe" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_RECIPE_S_RELATIONS_RECIPE_S">
-          <End Role="Recipe_Step" Type="Self.Recipe_Step" Multiplicity="1" />
-          <End Role="Recipe_Step_Ingredients" Type="Self.Recipe_Step_Ingredients" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Recipe_Step">
-              <PropertyRef Name="step_number" />
-            </Principal>
-            <Dependent Role="Recipe_Step_Ingredients">
-              <PropertyRef Name="step_number" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -111,6 +90,15 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
         </Function>
         <Function Name="Insert_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="name_category" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Insert_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name_ingredient" Type="varchar" Mode="In" />
+          <Parameter Name="unit" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Insert_Recipe" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name_recipe" Type="varchar" Mode="In" />
+          <Parameter Name="id_category" Type="smallint" Mode="In" />
+          <Parameter Name="instructions" Type="varchar" Mode="In" />
         </Function>
         <Function Name="Insert_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="username" Type="varchar" Mode="In" />
@@ -123,30 +111,19 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Recipe" EntityType="Self.Recipe" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Recipe_Step" EntityType="Self.Recipe_Step" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Relationship_2" EntityType="Self.Relationship_2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Recipe_Step_Ingredients" EntityType="Self.Recipe_Step_Ingredients" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Recipe_Step_Ingredients].[step_number] AS [step_number], 
-    [Recipe_Step_Ingredients].[id_ingredient] AS [id_ingredient], 
-    [Recipe_Step_Ingredients].[amout_required] AS [amout_required]
-    FROM [dbo].[Recipe_Step_Ingredients] AS [Recipe_Step_Ingredients]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_RECIPE_RELATIONS_CATEGORY" Association="Self.FK_RECIPE_RELATIONS_CATEGORY">
             <End Role="Category" EntitySet="Category" />
             <End Role="Recipe" EntitySet="Recipe" />
           </AssociationSet>
-          <AssociationSet Name="FK_RECIPE_S_RELATIONS_INGREDIE" Association="Self.FK_RECIPE_S_RELATIONS_INGREDIE">
+          <AssociationSet Name="FK_RELATION_RELATIONS_INGREDIE" Association="Self.FK_RELATION_RELATIONS_INGREDIE">
             <End Role="Ingredient" EntitySet="Ingredient" />
-            <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
+            <End Role="Relationship_2" EntitySet="Relationship_2" />
           </AssociationSet>
-          <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE" Association="Self.FK_RECIPE_S_RELATIONS_RECIPE">
+          <AssociationSet Name="FK_RELATION_RELATIONS_RECIPE" Association="Self.FK_RELATION_RELATIONS_RECIPE">
             <End Role="Recipe" EntitySet="Recipe" />
-            <End Role="Recipe_Step" EntitySet="Recipe_Step" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE_S" Association="Self.FK_RECIPE_S_RELATIONS_RECIPE_S">
-            <End Role="Recipe_Step" EntitySet="Recipe_Step" />
-            <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
+            <End Role="Relationship_2" EntitySet="Relationship_2" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -165,7 +142,7 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
           <Property Name="user_right" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Users" EntityType="KucharkaModel.User" />
           <FunctionImport Name="Insert_User">
             <Parameter Name="username" Mode="In" Type="String" />
             <Parameter Name="password" Mode="In" Type="String" />
@@ -176,29 +153,33 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
           <EntitySet Name="Categories" EntityType="KucharkaModel.Category" />
           <EntitySet Name="Ingredients" EntityType="KucharkaModel.Ingredient" />
           <EntitySet Name="Recipes" EntityType="KucharkaModel.Recipe" />
-          <EntitySet Name="Recipe_Step" EntityType="KucharkaModel.Recipe_Step" />
-          <EntitySet Name="Recipe_Step_Ingredients" EntityType="KucharkaModel.Recipe_Step_Ingredients" />
           <AssociationSet Name="FK_RECIPE_RELATIONS_CATEGORY" Association="KucharkaModel.FK_RECIPE_RELATIONS_CATEGORY">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Recipe" EntitySet="Recipes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RECIPE_S_RELATIONS_INGREDIE" Association="KucharkaModel.FK_RECIPE_S_RELATIONS_INGREDIE">
-            <End Role="Ingredient" EntitySet="Ingredients" />
-            <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE" Association="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE">
-            <End Role="Recipe" EntitySet="Recipes" />
-            <End Role="Recipe_Step" EntitySet="Recipe_Step" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE_S" Association="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE_S">
-            <End Role="Recipe_Step" EntitySet="Recipe_Step" />
-            <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
           </AssociationSet>
           <FunctionImport Name="Insert_Category" ReturnType="Collection(Int32)">
           <Parameter Name="name_category" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="category_Delete">
-            <Parameter Name="name_category" Mode="In" Type="String" />
+          <Parameter Name="name_category" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Recipe" ReturnType="Collection(Int32)">
+            <Parameter Name="name_recipe" Mode="In" Type="String" />
+            <Parameter Name="id_category" Mode="In" Type="Int16" />
+            <Parameter Name="instructions" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Recipe_Ingredient" EntityType="KucharkaModel.Recipe_Ingredient" />
+          <AssociationSet Name="FK_RELATION_RELATIONS_INGREDIE" Association="KucharkaModel.FK_RELATION_RELATIONS_INGREDIE">
+            <End Role="Ingredient" EntitySet="Ingredients" />
+            <End Role="Relationship_2" EntitySet="Recipe_Ingredient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RELATION_RELATIONS_RECIPE" Association="KucharkaModel.FK_RELATION_RELATIONS_RECIPE">
+            <End Role="Recipe" EntitySet="Recipes" />
+            <End Role="Relationship_2" EntitySet="Recipe_Ingredient" />
+          </AssociationSet>
+          <FunctionImport Name="Insert_Ingredient" ReturnType="Collection(Int32)">
+            <Parameter Name="name_ingredient" Mode="In" Type="String" />
+            <Parameter Name="unit" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Category">
@@ -216,7 +197,7 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
           <Property Name="id_ingredient" Type="Int16" Nullable="false" />
           <Property Name="name_ingredient" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
           <Property Name="unit" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Recipe_Step_Ingredients" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_INGREDIE" FromRole="Ingredient" ToRole="Recipe_Step_Ingredients" />
+          <NavigationProperty Name="Relationship_2" Relationship="KucharkaModel.FK_RELATION_RELATIONS_INGREDIE" FromRole="Ingredient" ToRole="Relationship_2" />
         </EntityType>
         <EntityType Name="Recipe">
           <Key>
@@ -226,28 +207,8 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
           <Property Name="id_category" Type="Int16" Nullable="false" />
           <Property Name="name_recipe" Type="String" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Category" Relationship="KucharkaModel.FK_RECIPE_RELATIONS_CATEGORY" FromRole="Recipe" ToRole="Category" />
-          <NavigationProperty Name="Recipe_Step" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE" FromRole="Recipe" ToRole="Recipe_Step" />
-        </EntityType>
-        <EntityType Name="Recipe_Step">
-          <Key>
-            <PropertyRef Name="step_number" />
-          </Key>
-          <Property Name="step_number" Type="Int16" Nullable="false" />
-          <Property Name="id_recipe" Type="Int16" Nullable="false" />
-          <Property Name="instruction" Type="String" Nullable="false" MaxLength="2048" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Recipe" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE" FromRole="Recipe_Step" ToRole="Recipe" />
-          <NavigationProperty Name="Recipe_Step_Ingredients" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE_S" FromRole="Recipe_Step" ToRole="Recipe_Step_Ingredients" />
-        </EntityType>
-        <EntityType Name="Recipe_Step_Ingredients">
-          <Key>
-            <PropertyRef Name="step_number" />
-            <PropertyRef Name="id_ingredient" />
-          </Key>
-          <Property Name="step_number" Type="Int16" Nullable="false" />
-          <Property Name="id_ingredient" Type="Int16" Nullable="false" />
-          <Property Name="amout_required" Type="Int32" />
-          <NavigationProperty Name="Ingredient" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_INGREDIE" FromRole="Recipe_Step_Ingredients" ToRole="Ingredient" />
-          <NavigationProperty Name="Recipe_Step" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE_S" FromRole="Recipe_Step_Ingredients" ToRole="Recipe_Step" />
+          <Property Name="instructions" Type="String" Nullable="false" MaxLength="2048" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Relationship_2" Relationship="KucharkaModel.FK_RELATION_RELATIONS_RECIPE" FromRole="Recipe" ToRole="Relationship_2" />
         </EntityType>
         <Association Name="FK_RECIPE_RELATIONS_CATEGORY">
           <End Type="KucharkaModel.Category" Role="Category" Multiplicity="1" />
@@ -261,39 +222,38 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_RECIPE_S_RELATIONS_INGREDIE">
+        <EntityType Name="Recipe_Ingredient">
+          <Key>
+            <PropertyRef Name="id_recipe" />
+            <PropertyRef Name="id_ingredient" />
+          </Key>
+          <Property Name="id_recipe" Type="Int16" Nullable="false" />
+          <Property Name="id_ingredient" Type="Int16" Nullable="false" />
+          <Property Name="amount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Ingredient" Relationship="KucharkaModel.FK_RELATION_RELATIONS_INGREDIE" FromRole="Relationship_2" ToRole="Ingredient" />
+          <NavigationProperty Name="Recipe" Relationship="KucharkaModel.FK_RELATION_RELATIONS_RECIPE" FromRole="Relationship_2" ToRole="Recipe" />
+        </EntityType>
+        <Association Name="FK_RELATION_RELATIONS_INGREDIE">
           <End Type="KucharkaModel.Ingredient" Role="Ingredient" Multiplicity="1" />
-          <End Type="KucharkaModel.Recipe_Step_Ingredients" Role="Recipe_Step_Ingredients" Multiplicity="*" />
+          <End Type="KucharkaModel.Recipe_Ingredient" Role="Relationship_2" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Ingredient">
               <PropertyRef Name="id_ingredient" />
             </Principal>
-            <Dependent Role="Recipe_Step_Ingredients">
+            <Dependent Role="Relationship_2">
               <PropertyRef Name="id_ingredient" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_RECIPE_S_RELATIONS_RECIPE">
+        <Association Name="FK_RELATION_RELATIONS_RECIPE">
           <End Type="KucharkaModel.Recipe" Role="Recipe" Multiplicity="1" />
-          <End Type="KucharkaModel.Recipe_Step" Role="Recipe_Step" Multiplicity="*" />
+          <End Type="KucharkaModel.Recipe_Ingredient" Role="Relationship_2" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Recipe">
               <PropertyRef Name="id_recipe" />
             </Principal>
-            <Dependent Role="Recipe_Step">
+            <Dependent Role="Relationship_2">
               <PropertyRef Name="id_recipe" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_RECIPE_S_RELATIONS_RECIPE_S">
-          <End Type="KucharkaModel.Recipe_Step" Role="Recipe_Step" Multiplicity="1" />
-          <End Type="KucharkaModel.Recipe_Step_Ingredients" Role="Recipe_Step_Ingredients" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Recipe_Step">
-              <PropertyRef Name="step_number" />
-            </Principal>
-            <Dependent Role="Recipe_Step_Ingredients">
-              <PropertyRef Name="step_number" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -355,36 +315,49 @@ warning 6002: The table/view 'xpecm36.dbo.Recipe_Step_Ingredients' does not have
                 <ScalarProperty Name="id_ingredient" ColumnName="id_ingredient" />
               </MappingFragment>
             </EntityTypeMapping>
+            <EntityTypeMapping TypeName="KucharkaModel.Ingredient">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KucharkaModel.Store.Insert_Ingredient">
+                  <ScalarProperty Name="unit" ParameterName="unit" />
+                  <ScalarProperty Name="name_ingredient" ParameterName="name_ingredient" />
+                  <ResultBinding Name="id_ingredient" ColumnName="id_ingredient" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Recipes">
             <EntityTypeMapping TypeName="KucharkaModel.Recipe">
               <MappingFragment StoreEntitySet="Recipe">
+                <ScalarProperty Name="instructions" ColumnName="instructions" />
                 <ScalarProperty Name="name_recipe" ColumnName="name_recipe" />
                 <ScalarProperty Name="id_category" ColumnName="id_category" />
                 <ScalarProperty Name="id_recipe" ColumnName="id_recipe" />
               </MappingFragment>
             </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Recipe_Step">
-            <EntityTypeMapping TypeName="KucharkaModel.Recipe_Step">
-              <MappingFragment StoreEntitySet="Recipe_Step">
-                <ScalarProperty Name="instruction" ColumnName="instruction" />
-                <ScalarProperty Name="id_recipe" ColumnName="id_recipe" />
-                <ScalarProperty Name="step_number" ColumnName="step_number" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Recipe_Step_Ingredients">
-            <EntityTypeMapping TypeName="KucharkaModel.Recipe_Step_Ingredients">
-              <MappingFragment StoreEntitySet="Recipe_Step_Ingredients">
-                <ScalarProperty Name="amout_required" ColumnName="amout_required" />
-                <ScalarProperty Name="id_ingredient" ColumnName="id_ingredient" />
-                <ScalarProperty Name="step_number" ColumnName="step_number" />
-              </MappingFragment>
+            <EntityTypeMapping TypeName="KucharkaModel.Recipe">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KucharkaModel.Store.Insert_Recipe">
+                  <ScalarProperty Name="instructions" ParameterName="instructions" />
+                  <ScalarProperty Name="id_category" ParameterName="id_category" />
+                  <ScalarProperty Name="name_recipe" ParameterName="name_recipe" />
+                  <ResultBinding Name="id_recipe" ColumnName="id_recipe" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="Insert_Category" FunctionName="KucharkaModel.Store.Insert_Category" />
           <FunctionImportMapping FunctionImportName="category_Delete" FunctionName="KucharkaModel.Store.category_Delete" />
+          <FunctionImportMapping FunctionImportName="Insert_Recipe" FunctionName="KucharkaModel.Store.Insert_Recipe" />
+          <EntitySetMapping Name="Recipe_Ingredient">
+            <EntityTypeMapping TypeName="KucharkaModel.Recipe_Ingredient">
+              <MappingFragment StoreEntitySet="Relationship_2">
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="id_ingredient" ColumnName="id_ingredient" />
+                <ScalarProperty Name="id_recipe" ColumnName="id_recipe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Insert_Ingredient" FunctionName="KucharkaModel.Store.Insert_Ingredient" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

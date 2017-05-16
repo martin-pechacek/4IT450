@@ -27,7 +27,7 @@ namespace Semestralka.Other
 
             IdentityUser identityUser = new IdentityUser();
        
-            using (KucharkaEntities context = new KucharkaEntities())
+            using (Entities context = new Entities())
             {
                 //parse userid from string to int
                 int id = int.Parse(userId);
@@ -48,7 +48,7 @@ namespace Semestralka.Other
 
             IdentityUser identityUser = new IdentityUser();
 
-            using (KucharkaEntities context = new KucharkaEntities())
+            using (Entities context = new Entities())
             {
                 //Finds user by username
                 User user = context.Users.Single(x => x.username == userName);
@@ -75,7 +75,7 @@ namespace Semestralka.Other
         {
             await Task.Delay(0);
 
-            using (KucharkaEntities context = new KucharkaEntities())
+            using (Entities context = new Entities())
             {
                 //parse userid from string to int
                 int userId = int.Parse(identityUser.Id);

@@ -12,7 +12,7 @@
     <Property Name="user_right" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="Users" EntityType="Self.User" />
+    <EntitySet Name="Users" EntityType="KucharkaModel.User" />
     <FunctionImport Name="Insert_User">
       <Parameter Name="username" Mode="In" Type="String" />
       <Parameter Name="password" Mode="In" Type="String" />
@@ -23,29 +23,33 @@
     <EntitySet Name="Categories" EntityType="KucharkaModel.Category" />
     <EntitySet Name="Ingredients" EntityType="KucharkaModel.Ingredient" />
     <EntitySet Name="Recipes" EntityType="KucharkaModel.Recipe" />
-    <EntitySet Name="Recipe_Step" EntityType="KucharkaModel.Recipe_Step" />
-    <EntitySet Name="Recipe_Step_Ingredients" EntityType="KucharkaModel.Recipe_Step_Ingredients" />
     <AssociationSet Name="FK_RECIPE_RELATIONS_CATEGORY" Association="KucharkaModel.FK_RECIPE_RELATIONS_CATEGORY">
       <End Role="Category" EntitySet="Categories" />
       <End Role="Recipe" EntitySet="Recipes" />
-    </AssociationSet>
-    <AssociationSet Name="FK_RECIPE_S_RELATIONS_INGREDIE" Association="KucharkaModel.FK_RECIPE_S_RELATIONS_INGREDIE">
-      <End Role="Ingredient" EntitySet="Ingredients" />
-      <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
-    </AssociationSet>
-    <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE" Association="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE">
-      <End Role="Recipe" EntitySet="Recipes" />
-      <End Role="Recipe_Step" EntitySet="Recipe_Step" />
-    </AssociationSet>
-    <AssociationSet Name="FK_RECIPE_S_RELATIONS_RECIPE_S" Association="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE_S">
-      <End Role="Recipe_Step" EntitySet="Recipe_Step" />
-      <End Role="Recipe_Step_Ingredients" EntitySet="Recipe_Step_Ingredients" />
     </AssociationSet>
     <FunctionImport Name="Insert_Category" ReturnType="Collection(Int32)">
       <Parameter Name="name_category" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="category_Delete">
       <Parameter Name="name_category" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Insert_Recipe" ReturnType="Collection(Int32)">
+      <Parameter Name="name_recipe" Mode="In" Type="String" />
+      <Parameter Name="id_category" Mode="In" Type="Int16" />
+      <Parameter Name="instructions" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="Recipe_Ingredient" EntityType="KucharkaModel.Recipe_Ingredient" />
+    <AssociationSet Name="FK_RELATION_RELATIONS_INGREDIE" Association="KucharkaModel.FK_RELATION_RELATIONS_INGREDIE">
+      <End Role="Ingredient" EntitySet="Ingredients" />
+      <End Role="Relationship_2" EntitySet="Recipe_Ingredient" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RELATION_RELATIONS_RECIPE" Association="KucharkaModel.FK_RELATION_RELATIONS_RECIPE">
+      <End Role="Recipe" EntitySet="Recipes" />
+      <End Role="Relationship_2" EntitySet="Recipe_Ingredient" />
+    </AssociationSet>
+    <FunctionImport Name="Insert_Ingredient" ReturnType="Collection(Int32)">
+      <Parameter Name="name_ingredient" Mode="In" Type="String" />
+      <Parameter Name="unit" Mode="In" Type="String" />
     </FunctionImport>
   </EntityContainer>
   <EntityType Name="Category">
@@ -63,7 +67,7 @@
     <Property Name="id_ingredient" Type="Int16" Nullable="false" />
     <Property Name="name_ingredient" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
     <Property Name="unit" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Recipe_Step_Ingredients" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_INGREDIE" FromRole="Ingredient" ToRole="Recipe_Step_Ingredients" />
+    <NavigationProperty Name="Relationship_2" Relationship="KucharkaModel.FK_RELATION_RELATIONS_INGREDIE" FromRole="Ingredient" ToRole="Relationship_2" />
   </EntityType>
   <EntityType Name="Recipe">
     <Key>
@@ -73,28 +77,8 @@
     <Property Name="id_category" Type="Int16" Nullable="false" />
     <Property Name="name_recipe" Type="String" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Category" Relationship="KucharkaModel.FK_RECIPE_RELATIONS_CATEGORY" FromRole="Recipe" ToRole="Category" />
-    <NavigationProperty Name="Recipe_Step" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE" FromRole="Recipe" ToRole="Recipe_Step" />
-  </EntityType>
-  <EntityType Name="Recipe_Step">
-    <Key>
-      <PropertyRef Name="step_number" />
-    </Key>
-    <Property Name="step_number" Type="Int16" Nullable="false" />
-    <Property Name="id_recipe" Type="Int16" Nullable="false" />
-    <Property Name="instruction" Type="String" Nullable="false" MaxLength="2048" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Recipe" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE" FromRole="Recipe_Step" ToRole="Recipe" />
-    <NavigationProperty Name="Recipe_Step_Ingredients" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE_S" FromRole="Recipe_Step" ToRole="Recipe_Step_Ingredients" />
-  </EntityType>
-  <EntityType Name="Recipe_Step_Ingredients">
-    <Key>
-      <PropertyRef Name="step_number" />
-      <PropertyRef Name="id_ingredient" />
-    </Key>
-    <Property Name="step_number" Type="Int16" Nullable="false" />
-    <Property Name="id_ingredient" Type="Int16" Nullable="false" />
-    <Property Name="amout_required" Type="Int32" />
-    <NavigationProperty Name="Ingredient" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_INGREDIE" FromRole="Recipe_Step_Ingredients" ToRole="Ingredient" />
-    <NavigationProperty Name="Recipe_Step" Relationship="KucharkaModel.FK_RECIPE_S_RELATIONS_RECIPE_S" FromRole="Recipe_Step_Ingredients" ToRole="Recipe_Step" />
+    <Property Name="instructions" Type="String" Nullable="false" MaxLength="2048" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Relationship_2" Relationship="KucharkaModel.FK_RELATION_RELATIONS_RECIPE" FromRole="Recipe" ToRole="Relationship_2" />
   </EntityType>
   <Association Name="FK_RECIPE_RELATIONS_CATEGORY">
     <End Type="KucharkaModel.Category" Role="Category" Multiplicity="1" />
@@ -108,39 +92,38 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_RECIPE_S_RELATIONS_INGREDIE">
+  <EntityType Name="Recipe_Ingredient">
+    <Key>
+      <PropertyRef Name="id_recipe" />
+      <PropertyRef Name="id_ingredient" />
+    </Key>
+    <Property Name="id_recipe" Type="Int16" Nullable="false" />
+    <Property Name="id_ingredient" Type="Int16" Nullable="false" />
+    <Property Name="amount" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Ingredient" Relationship="KucharkaModel.FK_RELATION_RELATIONS_INGREDIE" FromRole="Relationship_2" ToRole="Ingredient" />
+    <NavigationProperty Name="Recipe" Relationship="KucharkaModel.FK_RELATION_RELATIONS_RECIPE" FromRole="Relationship_2" ToRole="Recipe" />
+  </EntityType>
+  <Association Name="FK_RELATION_RELATIONS_INGREDIE">
     <End Type="KucharkaModel.Ingredient" Role="Ingredient" Multiplicity="1" />
-    <End Type="KucharkaModel.Recipe_Step_Ingredients" Role="Recipe_Step_Ingredients" Multiplicity="*" />
+    <End Type="KucharkaModel.Recipe_Ingredient" Role="Relationship_2" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Ingredient">
         <PropertyRef Name="id_ingredient" />
       </Principal>
-      <Dependent Role="Recipe_Step_Ingredients">
+      <Dependent Role="Relationship_2">
         <PropertyRef Name="id_ingredient" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_RECIPE_S_RELATIONS_RECIPE">
+  <Association Name="FK_RELATION_RELATIONS_RECIPE">
     <End Type="KucharkaModel.Recipe" Role="Recipe" Multiplicity="1" />
-    <End Type="KucharkaModel.Recipe_Step" Role="Recipe_Step" Multiplicity="*" />
+    <End Type="KucharkaModel.Recipe_Ingredient" Role="Relationship_2" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Recipe">
         <PropertyRef Name="id_recipe" />
       </Principal>
-      <Dependent Role="Recipe_Step">
+      <Dependent Role="Relationship_2">
         <PropertyRef Name="id_recipe" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_RECIPE_S_RELATIONS_RECIPE_S">
-    <End Type="KucharkaModel.Recipe_Step" Role="Recipe_Step" Multiplicity="1" />
-    <End Type="KucharkaModel.Recipe_Step_Ingredients" Role="Recipe_Step_Ingredients" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Recipe_Step">
-        <PropertyRef Name="step_number" />
-      </Principal>
-      <Dependent Role="Recipe_Step_Ingredients">
-        <PropertyRef Name="step_number" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

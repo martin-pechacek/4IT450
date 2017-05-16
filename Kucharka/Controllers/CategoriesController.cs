@@ -31,7 +31,7 @@ namespace Semestralka.Controllers
         {
             await Task.Delay(0);
 
-            using (KucharkaEntities kucharkaEntities = new KucharkaEntities())
+            using (Entities kucharkaEntities = new Entities())
             {
                 //sends data into database
                 kucharkaEntities.Categories.Add(category);
@@ -58,8 +58,8 @@ namespace Semestralka.Controllers
         {
             await Task.Delay(0);
             
-            using (KucharkaEntities context =
-                new KucharkaEntities())
+            using (Entities context =
+                new Entities())
             {
                 //find category
                 var category = context.Categories.Single(x => x.name_category == categoryName);

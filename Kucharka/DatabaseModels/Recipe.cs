@@ -16,14 +16,15 @@ namespace Semestralka.DatabaseModels
     {
         public Recipe()
         {
-            this.Recipe_Step = new HashSet<Recipe_Step>();
+            this.Relationship_2 = new HashSet<Recipe_Ingredient>();
         }
     
         public short id_recipe { get; set; }
         public short id_category { get; set; }
         public string name_recipe { get; set; }
+        public string instructions { get; set; }
     
         public virtual Category Category { get; set; }
-        public virtual ICollection<Recipe_Step> Recipe_Step { get; set; }
+        public virtual ICollection<Recipe_Ingredient> Relationship_2 { get; set; }
     }
 }
