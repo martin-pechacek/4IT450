@@ -1,4 +1,7 @@
 ﻿@using Semestralka.DataObjects;
+@using Semestralka.Models;
+
+@model RecipeDetailModel
 
 @{
     ViewBag.Title = "Recipe";
@@ -20,3 +23,19 @@
     </tbody>
 </table>
 
+@*Ingredients*@
+
+
+@*Dropdown for category*@
+@using (Html.BeginForm("Recipe", "Recipes", FormMethod.Post))
+{
+    @Html.DropDownListFor(m => m.IngredientModel.id_ingredient, (List<SelectListItem>)ViewBag.IngredientsList,
+        new
+        {
+            @class = "form-control input-sm",
+            onchange = "$(this).closest('form').submit();"
+        })
+    
+    @ViewBag.Unit
+   <input type="submit" value="Přidat" />
+}

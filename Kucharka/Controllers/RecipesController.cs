@@ -60,6 +60,32 @@ namespace Semestralka.Controllers
             return RedirectToAction("Recipe", "Recipes", new { id = recipe.id_recipe });
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Recipe(RecipeDetailModel model)
+        {
+            int id = int.Parse(model.IngredientModel.id_ingredient);
+
+            IngredientsDO unit = await IngredientsDO.GetUnitAsync(id);
+
+            ViewBag.Unit = unit.Unit;
+
+            List<RecipeDO> recipe = await RecipeDO.GetRecipeAsync(model.RecipeModel.id_recipe);
+
+            ViewBag.Recipe = recipe;
+
+            List<IngredientsDO> ingredients = await IngredientsDO.GetIngredientsAsync();
+
+            ViewBag.IngredientsList = ingredients
+                .Select(x => new SelectListItem()
+                {
+                    Text = x.IngredientName,
+                    Value = x.IngredientID.ToString()
+                })
+                .ToList();
+
+            return View(model);
+        }
+
         /**
         *  Shows recipe detail
         **/
@@ -69,8 +95,18 @@ namespace Semestralka.Controllers
 
             ViewBag.Recipe = recipe;
 
-            var model = new RecipeModel();
-            model.id_recipe = id;
+            List<IngredientsDO> ingredients = await IngredientsDO.GetIngredientsAsync();
+
+            ViewBag.IngredientsList = ingredients
+                .Select(x => new SelectListItem()
+                {
+                    Text = x.IngredientName,
+                    Value = x.IngredientID.ToString()
+                })
+                .ToList();
+
+            var model = new RecipeDetailModel();
+                        
             return View(model);
         }
 

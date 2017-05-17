@@ -20,6 +20,7 @@ namespace Semestralka.Models
         [Display(Name = "Postup")]
         public string instructions { get; set; }
 
+        [Required]
         public int id_recipe { get; set; }
     }
 }

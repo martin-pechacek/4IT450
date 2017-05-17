@@ -15,5 +15,8 @@ namespace Semestralka.Models
         [Required]
         [Display(Name = "Jednotka")]
         public string unit { get; set; }
+
+        [Required]
+        public string id_ingredient { get; set; }
     }
 }
