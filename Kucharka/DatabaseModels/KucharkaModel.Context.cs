@@ -105,5 +105,48 @@ namespace Semestralka.DatabaseModels
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Insert_Ingredient", name_ingredientParameter, unitParameter);
         }
+    
+        public virtual int Insert_Recipe_Ingredient(Nullable<int> amount)
+        {
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Insert_Recipe_Ingredient", amountParameter);
+        }
+    
+        public virtual int Insert_Recipe_Ingredient1(Nullable<short> id_recipe, Nullable<short> id_ingredient, Nullable<int> amount)
+        {
+            var id_recipeParameter = id_recipe.HasValue ?
+                new ObjectParameter("id_recipe", id_recipe) :
+                new ObjectParameter("id_recipe", typeof(short));
+    
+            var id_ingredientParameter = id_ingredient.HasValue ?
+                new ObjectParameter("id_ingredient", id_ingredient) :
+                new ObjectParameter("id_ingredient", typeof(short));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Insert_Recipe_Ingredient1", id_recipeParameter, id_ingredientParameter, amountParameter);
+        }
+    
+        public virtual int Insert_Recipe_Ingredient2(Nullable<short> id_recipe, Nullable<short> id_ingredient, Nullable<int> amount)
+        {
+            var id_recipeParameter = id_recipe.HasValue ?
+                new ObjectParameter("id_recipe", id_recipe) :
+                new ObjectParameter("id_recipe", typeof(short));
+    
+            var id_ingredientParameter = id_ingredient.HasValue ?
+                new ObjectParameter("id_ingredient", id_ingredient) :
+                new ObjectParameter("id_ingredient", typeof(short));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Insert_Recipe_Ingredient2", id_recipeParameter, id_ingredientParameter, amountParameter);
+        }
     }
 }

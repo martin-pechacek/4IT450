@@ -10,17 +10,17 @@ namespace Semestralka.Models
     {
         [Required]
         [Display(Name = "Recept")]
-        public string name_recipe { get; set; }
+        public string Name_recipe { get; set; }
 
         [Required]
         [Display(Name = "Kategorie")]
-        public string id_category { get; set; }
+        public string Id_category { get; set; }
 
         [Required]
         [Display(Name = "Postup")]
-        public string instructions { get; set; }
+        public string Instructions { get; set; }
 
         [Required]
-        public int id_recipe { get; set; }
+        public int Id_recipe { get; set; }
     }
 }

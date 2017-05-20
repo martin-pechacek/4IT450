@@ -14,20 +14,19 @@ namespace Semestralka.DataObjects
         public int CategoryID { get; set; }
         public string Instructions { get; set; }
 
-        public static async Task<List<RecipeDO>> GetRecipeAsync(int id)
+        public static async Task<Recipe> GetRecipeAsync(int id)
         {
+            await Task.Delay(0);
+
+            Recipe recipe = new Recipe();
+
             using (Entities context =
                 new Entities())
             {
-                return await context.Recipes
-                  .Where(x => x.id_recipe == id)
-                  .Select(x => new RecipeDO()
-                    {
-                        RecipeName = x.name_recipe,
-                        CategoryID = x.id_category,
-                        Instructions = x.instructions
-                    }).ToListAsync();
+                recipe = context.Recipes.Single(x => x.id_recipe == id);
             }
+
+            return recipe;
         }
     }
 }

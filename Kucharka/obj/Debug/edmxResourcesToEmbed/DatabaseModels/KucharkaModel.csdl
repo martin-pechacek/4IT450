@@ -51,6 +51,19 @@
       <Parameter Name="name_ingredient" Mode="In" Type="String" />
       <Parameter Name="unit" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="Insert_Recipe_Ingredient">
+      <Parameter Name="amount" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Insert_Recipe_Ingredient1">
+      <Parameter Name="id_recipe" Mode="In" Type="Int16" />
+      <Parameter Name="id_ingredient" Mode="In" Type="Int16" />
+      <Parameter Name="amount" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Insert_Recipe_Ingredient2">
+      <Parameter Name="id_recipe" Mode="In" Type="Int16" />
+      <Parameter Name="id_ingredient" Mode="In" Type="Int16" />
+      <Parameter Name="amount" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="Category">
     <Key>

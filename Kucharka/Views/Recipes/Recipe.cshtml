@@ -9,33 +9,52 @@
 
 <h2>Recipe</h2>
 
+
 @*Recipe*@
+@using (Html.BeginForm("Recipe", "Recipes", FormMethod.Post))
+{
+
+@Html.HiddenFor(m => m.RecipeModel.Id_recipe);                                            
+
 <table class="table">
     <tbody>
-        @foreach (RecipeDO recipe in ViewBag.Recipe)
+            <tr>
+                <td>@Html.DisplayFor(m => m.RecipeModel.Name_recipe)</td>
+                <td>@Html.DisplayFor(m => m.RecipeModel.Id_category)</td>
+                <td>@Html.DisplayFor(m => m.RecipeModel.Instructions)</td>
+            </tr>
+    </tbody>
+</table>
+
+@*Ingredients*@
+<p>Ingredience</p>
+<table class="table">
+    <tbody>
+        @foreach (RecipeIngredientsDO ingredient in ViewBag.Ingredients)
         {
             <tr>
-                <td>@recipe.RecipeName</td>
-                <td>@recipe.CategoryID</td>
-                <td>@recipe.Instructions</td>
+                <td>@ingredient.Amount</td>
+            </tr>
+        }
+
+        @foreach (string ingredientName in ViewBag.IngredientsNames)
+        {
+            <tr>
+                <td>@ingredientName</td>
             </tr>
         }
     </tbody>
 </table>
 
-@*Ingredients*@
-
-
-@*Dropdown for category*@
-@using (Html.BeginForm("Recipe", "Recipes", FormMethod.Post))
-{
-    @Html.DropDownListFor(m => m.IngredientModel.id_ingredient, (List<SelectListItem>)ViewBag.IngredientsList,
+@*Dropdown for category *@
+    @Html.DropDownListFor(m => m.IngredientModel.Id_ingredient, (List<SelectListItem>)ViewBag.IngredientsList,
         new
         {
             @class = "form-control input-sm",
-            onchange = "$(this).closest('form').submit();"
+            onchange = "$(this).closest('form').submit();",
         })
     
+    @Html.TextBoxFor(m => m.RecipeIngredient.Amount)
     @ViewBag.Unit
-   <input type="submit" value="Přidat" />
+   <input type="submit" value="Přidat" name="Add"/>
 }

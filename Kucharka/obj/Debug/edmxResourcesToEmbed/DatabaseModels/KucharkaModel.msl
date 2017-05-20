@@ -94,7 +94,17 @@
           <ScalarProperty Name="id_recipe" ColumnName="id_recipe" />
         </MappingFragment>
       </EntityTypeMapping>
+      <EntityTypeMapping TypeName="KucharkaModel.Recipe_Ingredient">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="KucharkaModel.Store.Insert_Recipe_Ingredient">
+            <ScalarProperty Name="amount" ParameterName="amount" />
+            <ScalarProperty Name="id_ingredient" ParameterName="id_ingredient" />
+            <ScalarProperty Name="id_recipe" ParameterName="id_recipe" />
+          </InsertFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
     </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="Insert_Ingredient" FunctionName="KucharkaModel.Store.Insert_Ingredient" />
+    <FunctionImportMapping FunctionImportName="Insert_Recipe_Ingredient2" FunctionName="KucharkaModel.Store.Insert_Recipe_Ingredient" />
   </EntityContainerMapping>
 </Mapping>

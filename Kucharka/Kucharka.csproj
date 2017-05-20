@@ -177,6 +177,7 @@
     <Compile Include="DataObjects\CategoryDO.cs" />
     <Compile Include="DataObjects\IngredientsDO.cs" />
     <Compile Include="DataObjects\RecipeDO.cs" />
+    <Compile Include="DataObjects\RecipeIngredientsDO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -185,6 +186,7 @@
     <Compile Include="Models\IngredientModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RecipeDetailModel.cs" />
+    <Compile Include="Models\RecipeIngredientModel.cs" />
     <Compile Include="Models\RecipeModel.cs" />
     <Compile Include="Other\IdentityUser.cs" />
     <Compile Include="Other\UserStore.cs" />

@@ -30,7 +30,7 @@ namespace Semestralka.Controllers
         }
 
         /**
-        *  Method for inserting new category into database
+        *  Method for inserting new recipe into database
         **/
         [HttpPost]
         public async Task<ActionResult> Index(Recipe recipe)
@@ -61,15 +61,15 @@ namespace Semestralka.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Recipe(RecipeDetailModel model)
+        public async Task<ActionResult> Recipe(RecipeDetailModel model, string add, Recipe_Ingredient recipeIngredient)
         {
-            int id = int.Parse(model.IngredientModel.id_ingredient);
+            int id = int.Parse(model.IngredientModel.Id_ingredient);
 
             IngredientsDO unit = await IngredientsDO.GetUnitAsync(id);
 
             ViewBag.Unit = unit.Unit;
 
-            List<RecipeDO> recipe = await RecipeDO.GetRecipeAsync(model.RecipeModel.id_recipe);
+            Recipe recipe = await RecipeDO.GetRecipeAsync(model.RecipeModel.Id_recipe);
 
             ViewBag.Recipe = recipe;
 
@@ -83,7 +83,30 @@ namespace Semestralka.Controllers
                 })
                 .ToList();
 
-            return View(model);
+            recipeIngredient.id_ingredient = Convert.ToInt16(id);
+            recipeIngredient.id_recipe = Convert.ToInt16(model.RecipeModel.Id_recipe);
+
+            //control if "add ingredient" button was pressed or was chosen another ingredient from dropdown list
+            if (add != null)
+            {
+                using (Entities kucharkaEntities = new Entities())
+                {
+                    //sends data into database
+                    kucharkaEntities.Recipe_Ingredient.Add(recipeIngredient);
+                    //save changes in database
+                    kucharkaEntities.SaveChanges();
+                    //initialization variable for error message
+                    string message = string.Empty;
+                    //information message
+                    message = "Ingredience přidána.";
+
+                    return View();
+                }
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         /**
@@ -91,13 +114,23 @@ namespace Semestralka.Controllers
         **/
         public async Task<ActionResult> Recipe(int id)
         {
-            List<RecipeDO> recipe = await RecipeDO.GetRecipeAsync(id);
+            RecipeDetailModel model = new RecipeDetailModel();
+
+            Recipe recipe = await RecipeDO.GetRecipeAsync(id);
+
+            model.RecipeModel = new RecipeModel()
+            {
+                Id_recipe = recipe.id_recipe,
+                Id_category = Convert.ToString(recipe.id_category),
+                Name_recipe = recipe.name_recipe,
+                Instructions = recipe.instructions
+            };
 
             ViewBag.Recipe = recipe;
 
-            List<IngredientsDO> ingredients = await IngredientsDO.GetIngredientsAsync();
+            List<IngredientsDO> IngredientsDropDown = await IngredientsDO.GetIngredientsAsync();
 
-            ViewBag.IngredientsList = ingredients
+            ViewBag.IngredientsList = IngredientsDropDown
                 .Select(x => new SelectListItem()
                 {
                     Text = x.IngredientName,
@@ -105,8 +138,24 @@ namespace Semestralka.Controllers
                 })
                 .ToList();
 
-            var model = new RecipeDetailModel();
-                        
+            List<RecipeIngredientsDO> ingredients = await RecipeIngredientsDO.GetIngredientsAsync(recipe.id_recipe);
+
+            List<string> ingredientsNamesList = new List<string>();
+
+            for (int i = 0; i < ingredients.Count; i++ )
+            {
+                int ingredientID = ingredients.ElementAt(i).IngredientID;
+                string ingredientName = await IngredientsDO.GetNameAsync(ingredientID);
+                ingredientsNamesList.Add(ingredientName);
+            }
+
+            ViewBag.Ingredients = ingredients;
+            ViewBag.IngredientsNames = ingredientsNamesList;
+
+            IngredientsDO unit = await IngredientsDO.GetFirstUnitAsync();
+
+            ViewBag.Unit = unit.Unit;
+
             return View(model);
         }
 

@@ -32,7 +32,7 @@ namespace Semestralka.DataObjects
         }
 
         /**
-        *  Return unit of Ingredient
+        *  Return unit of ingredient
         **/
         public static async Task<IngredientsDO> GetUnitAsync(int id)
         {
@@ -43,6 +43,42 @@ namespace Semestralka.DataObjects
             using (Entities context = new Entities())
             {
                 Ingredient ingredient = context.Ingredients.Single(x => x.id_ingredient == id);
+                ingredientDO.Unit = ingredient.unit;
+            }
+
+            return ingredientDO;
+        }
+
+        /**
+        *  Return ingredient name
+        **/
+        public static async Task<string> GetNameAsync(int id)
+        {
+            await Task.Delay(0);
+
+            string ingredientName = "";
+
+            using (Entities context = new Entities())
+            {
+                Ingredient ingredient = context.Ingredients.Single(x => x.id_ingredient == id);
+                ingredientName = ingredient.name_ingredient;
+            }
+
+            return ingredientName;
+        }
+
+        /**
+         *  Return unit of first ingredient in database. Used when recipe page is loading
+        **/
+        public static async Task<IngredientsDO> GetFirstUnitAsync()
+        {
+            await Task.Delay(0);
+
+            IngredientsDO ingredientDO = new IngredientsDO();
+
+            using (Entities context = new Entities())
+            {
+                Ingredient ingredient = context.Ingredients.First();
                 ingredientDO.Unit = ingredient.unit;
             }
 

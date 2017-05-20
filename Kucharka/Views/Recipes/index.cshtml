@@ -13,18 +13,18 @@
 {
     <div class="form-group">
         @*Label and textbox for recipe name*@
-        @Html.LabelFor(m => m.name_recipe)
-        @Html.TextBoxFor(m => m.name_recipe)
+        @Html.LabelFor(m => m.Name_recipe)
+        @Html.TextBoxFor(m => m.Name_recipe)
 
         @*Dropdown for category*@
-        @Html.DropDownListFor(m => m.id_category, (List<SelectListItem>)ViewBag.CategoryList,
+        @Html.DropDownListFor(m => m.Id_category, (List<SelectListItem>)ViewBag.CategoryList,
             new
             {
                 @class = "form-control input-sm",
                 onchange = "$(this).closest('form').submit();"
             })
         
-        @Html.TextAreaFor(m => m.instructions, 10, 70, null)
+        @Html.TextAreaFor(m => m.Instructions, 10, 70, null)
 
        
          @*Add button*@

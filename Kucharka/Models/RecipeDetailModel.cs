@@ -9,5 +9,6 @@ namespace Semestralka.Models
     {
         public RecipeModel RecipeModel { get; set; }
         public IngredientModel IngredientModel { get; set; }
+        public RecipeIngredientModel RecipeIngredient { get; set; }
     }
 }

@@ -95,6 +95,11 @@
     <Parameter Name="id_category" Type="smallint" Mode="In" />
     <Parameter Name="instructions" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="Insert_Recipe_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id_recipe" Type="smallint" Mode="In" />
+    <Parameter Name="id_ingredient" Type="smallint" Mode="In" />
+    <Parameter Name="amount" Type="int" Mode="In" />
+  </Function>
   <Function Name="Insert_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="username" Type="varchar" Mode="In" />
     <Parameter Name="password" Type="varchar" Mode="In" />

@@ -10,13 +10,13 @@ namespace Semestralka.Models
     {
         [Required]
         [Display(Name = "Ingredience")]
-        public string name_ingredient { get; set; }
+        public string Name_ingredient { get; set; }
 
         [Required]
         [Display(Name = "Jednotka")]
-        public string unit { get; set; }
+        public string Unit { get; set; }
 
         [Required]
-        public string id_ingredient { get; set; }
+        public string Id_ingredient { get; set; }
     }
 }
