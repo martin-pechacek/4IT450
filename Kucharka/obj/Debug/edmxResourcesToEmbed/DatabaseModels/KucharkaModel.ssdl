@@ -24,6 +24,8 @@
     <Property Name="name_recipe" Type="varchar" MaxLength="1024" Nullable="false" />
     <Property Name="instructions" Type="varchar" MaxLength="2048" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Relationship_2">
     <Key>
       <PropertyRef Name="id_recipe" />
@@ -37,7 +39,7 @@
     <Key>
       <PropertyRef Name="id_user" />
     </Key>
-    <Property Name="id_user" Type="smallint" Nullable="false" />
+    <Property Name="id_user" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="password" Type="varchar" MaxLength="1024" Nullable="false" />
     <Property Name="firstname" Type="varchar" MaxLength="128" Nullable="false" />
@@ -83,6 +85,10 @@
   <Function Name="category_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="name_category" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="Delete_Recipe_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id_ingredient" Type="int" Mode="In" />
+    <Parameter Name="id_recipe" Type="int" Mode="In" />
+  </Function>
   <Function Name="Insert_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="name_category" Type="varchar" Mode="In" />
   </Function>
@@ -111,8 +117,14 @@
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Recipe" EntityType="Self.Recipe" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Relationship_2" EntityType="Self.Relationship_2" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Relationship_2" EntityType="Self.Relationship_2" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Relationship_2].[id_recipe] AS [id_recipe], 
+    [Relationship_2].[id_ingredient] AS [id_ingredient], 
+    [Relationship_2].[amount] AS [amount]
+    FROM [dbo].[Relationship_2] AS [Relationship_2]</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK_RECIPE_RELATIONS_CATEGORY" Association="Self.FK_RECIPE_RELATIONS_CATEGORY">
       <End Role="Category" EntitySet="Category" />
       <End Role="Recipe" EntitySet="Recipe" />

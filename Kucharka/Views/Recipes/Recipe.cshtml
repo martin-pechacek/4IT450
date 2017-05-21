@@ -1,5 +1,6 @@
 ﻿@using Semestralka.DataObjects;
 @using Semestralka.Models;
+@using System.Linq;
 
 @model RecipeDetailModel
 
@@ -16,6 +17,7 @@
 
 @Html.HiddenFor(m => m.RecipeModel.Id_recipe);                                            
 
+<p>Recept</p>
 <table class="table">
     <tbody>
             <tr>
@@ -30,24 +32,24 @@
 <p>Ingredience</p>
 <table class="table">
     <tbody>
-        @foreach (RecipeIngredientsDO ingredient in ViewBag.Ingredients)
+        @for (var i = 0; i < Enumerable.Count(ViewBag.Ingredients); i++)
         {
             <tr>
-                <td>@ingredient.Amount</td>
-            </tr>
-        }
-
-        @foreach (string ingredientName in ViewBag.IngredientsNames)
-        {
-            <tr>
-                <td>@ingredientName</td>
+                <td>@ViewBag.Ingredients[i].Amount</td>
+                <td>@ViewBag.IngredientUnits[i]</td>
+                <td>@ViewBag.IngredientsNames[i]</td>
+                <td>
+                    <a href="@Url.Action("RemoveIngredient", "Recipes", new { ingredientID = ViewBag.Ingredients[i].IngredientID, recipeID = @Model.RecipeModel.Id_recipe })">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
 @*Dropdown for category *@
-    @Html.DropDownListFor(m => m.IngredientModel.Id_ingredient, (List<SelectListItem>)ViewBag.IngredientsList,
+    @Html.DropDownListFor(m => m.IngredientModel.Id_ingredient, (List<SelectListItem>)ViewBag.IngredientsDropDown,
         new
         {
             @class = "form-control input-sm",

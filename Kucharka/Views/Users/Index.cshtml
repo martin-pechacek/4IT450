@@ -15,22 +15,26 @@
         @*Label and textbox for username*@
         @Html.Label("Username")
         @Html.TextBoxFor(m => m.username)
+        @Html.ValidationMessage("Username")
 
         @*Label and textbox for password*@
         @Html.Label("Password")
         @Html.PasswordFor(m => m.password)
+        @Html.ValidationMessage("Password")
 
         @*Label and textbox for firstname*@
         @Html.Label("Firstname")
         @Html.TextBoxFor(m => m.firstname)
+        @Html.ValidationMessage("Firstname")
 
         @*Label and textbox for lastname*@
         @Html.Label("Lastname")
         @Html.TextBoxFor(m => m.lastname)
+        @Html.ValidationMessage("Lastname")
 
         @*Label and textbox for user_right*@
         @Html.Label("Edit users")
-        @Html.TextBoxFor(m => m.user_right)
+        @Html.CheckBoxFor(m => m.user_right)
 
         @*Submit button*@
         <input type="submit" value="Send" />

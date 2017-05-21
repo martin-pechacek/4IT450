@@ -1,6 +1,7 @@
 ﻿using Semestralka.DatabaseModels;
 using Semestralka.DataObjects;
 using Semestralka.Models;
+using Semestralka.Other;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace Semestralka.Controllers
 {
     public class RecipesController : Controller
     {
+        IngredientsOperations ingredientsOperations = new IngredientsOperations();
+
         //
         // GET: /Recipes/
         public async Task<ActionResult> Index(RecipeModel model)
@@ -73,15 +76,17 @@ namespace Semestralka.Controllers
 
             ViewBag.Recipe = recipe;
 
-            List<IngredientsDO> ingredients = await IngredientsDO.GetIngredientsAsync();
+            List<RecipeIngredientsDO> ingredientsList = await RecipeIngredientsDO.GetIngredientsAsync(recipe.id_recipe);
 
-            ViewBag.IngredientsList = ingredients
-                .Select(x => new SelectListItem()
-                {
-                    Text = x.IngredientName,
-                    Value = x.IngredientID.ToString()
-                })
-                .ToList();
+            ViewBag.IngredientsDropDown = ingredientsOperations.GetIngredientsDropDown(await IngredientsDO.GetIngredientsAsync());
+
+            //Used for displaying amount
+            ViewBag.Ingredients = ingredientsList;
+
+            //Names of ingredients used in recipe
+            ViewBag.IngredientsNames = await ingredientsOperations.GetIngredientsNames(ingredientsList);
+
+            ViewBag.IngredientUnits = await ingredientsOperations.GetUnitNames(ingredientsList);
 
             recipeIngredient.id_ingredient = Convert.ToInt16(id);
             recipeIngredient.id_recipe = Convert.ToInt16(model.RecipeModel.Id_recipe);
@@ -89,19 +94,27 @@ namespace Semestralka.Controllers
             //control if "add ingredient" button was pressed or was chosen another ingredient from dropdown list
             if (add != null)
             {
-                using (Entities kucharkaEntities = new Entities())
+                using (Entities context = new Entities())
                 {
-                    //sends data into database
-                    kucharkaEntities.Recipe_Ingredient.Add(recipeIngredient);
-                    //save changes in database
-                    kucharkaEntities.SaveChanges();
                     //initialization variable for error message
                     string message = string.Empty;
-                    //information message
-                    message = "Ingredience přidána.";
 
-                    return View();
+                    //find ingredient
+                    try
+                    {
+                        var ingredient = context.Recipe_Ingredient.Single(x => x.id_recipe == recipeIngredient.id_recipe && x.id_ingredient == recipeIngredient.id_ingredient);
+                        message = "Ingredience již existuje.\\n";
+                    }
+                    catch(Exception ex)
+                    {
+                        //message = ex.Message;
+                        //sends data into database
+                        context.Recipe_Ingredient.Add(recipeIngredient);
+                        //save changes in database
+                        context.SaveChanges();
+                    }
                 }
+                return RedirectToAction("Recipe", "Recipes", new { id = recipe.id_recipe });
             }
             else
             {
@@ -112,51 +125,50 @@ namespace Semestralka.Controllers
         /**
         *  Shows recipe detail
         **/
-        public async Task<ActionResult> Recipe(int id)
+        public async Task<ActionResult> Recipe(int? id)
         {
-            RecipeDetailModel model = new RecipeDetailModel();
-
-            Recipe recipe = await RecipeDO.GetRecipeAsync(id);
-
-            model.RecipeModel = new RecipeModel()
+            if(id == null)
             {
-                Id_recipe = recipe.id_recipe,
-                Id_category = Convert.ToString(recipe.id_category),
-                Name_recipe = recipe.name_recipe,
-                Instructions = recipe.instructions
-            };
-
-            ViewBag.Recipe = recipe;
-
-            List<IngredientsDO> IngredientsDropDown = await IngredientsDO.GetIngredientsAsync();
-
-            ViewBag.IngredientsList = IngredientsDropDown
-                .Select(x => new SelectListItem()
-                {
-                    Text = x.IngredientName,
-                    Value = x.IngredientID.ToString()
-                })
-                .ToList();
-
-            List<RecipeIngredientsDO> ingredients = await RecipeIngredientsDO.GetIngredientsAsync(recipe.id_recipe);
-
-            List<string> ingredientsNamesList = new List<string>();
-
-            for (int i = 0; i < ingredients.Count; i++ )
-            {
-                int ingredientID = ingredients.ElementAt(i).IngredientID;
-                string ingredientName = await IngredientsDO.GetNameAsync(ingredientID);
-                ingredientsNamesList.Add(ingredientName);
+                return RedirectToAction("Index", "Home");
             }
+            else 
+            { 
 
-            ViewBag.Ingredients = ingredients;
-            ViewBag.IngredientsNames = ingredientsNamesList;
+                //Initialize model
+                RecipeDetailModel model = new RecipeDetailModel();
+                //Get one re cipe depending on id
+                Recipe recipe = await RecipeDO.GetRecipeAsync((int)id);
+            
+                model.RecipeModel = new RecipeModel()
+                {
+                    Id_recipe = recipe.id_recipe,
+                    Id_category = Convert.ToString(recipe.id_category),
+                    Name_recipe = recipe.name_recipe,
+                    Instructions = recipe.instructions
+                };
 
-            IngredientsDO unit = await IngredientsDO.GetFirstUnitAsync();
+                //unit which shows next to the textbox for amount of ingredient. Used only for first loading
+                IngredientsDO unit = await IngredientsDO.GetFirstUnitAsync();
 
-            ViewBag.Unit = unit.Unit;
+                List<RecipeIngredientsDO> ingredientsList = await RecipeIngredientsDO.GetIngredientsAsync(recipe.id_recipe);            
 
-            return View(model);
+                ViewBag.IngredientsDropDown = ingredientsOperations.GetIngredientsDropDown(await IngredientsDO.GetIngredientsAsync());
+
+                //Used for displaying amount
+                ViewBag.Ingredients = ingredientsList;
+
+                //Names of ingredients used in recipe
+                ViewBag.IngredientsNames = await ingredientsOperations.GetIngredientsNames(ingredientsList);
+
+                ViewBag.IngredientUnits = await ingredientsOperations.GetUnitNames(ingredientsList);
+            
+                //Unit shown next to the textbox for inserting amount
+                ViewBag.Unit = unit.Unit;
+
+                ViewBag.Recipe = recipe;
+
+                return View(model);
+            }
         }
 
         /**
@@ -170,8 +182,6 @@ namespace Semestralka.Controllers
             using (Entities kucharkaEntities = new Entities())
             {
                 kucharkaEntities.Ingredients.Add(ingredient);
-                //save changes in database
-                kucharkaEntities.SaveChanges();
                 //initialization variable for error message
                 string message = string.Empty;
 
@@ -182,11 +192,28 @@ namespace Semestralka.Controllers
                         message = "Ingredience již existuje.\\n";
                         break;
                     default:
+                        //save changes in database
+                        kucharkaEntities.SaveChanges();
                         message = "Ingredience přidána.\\nId: " + ingredient.id_ingredient.ToString();
                         break;
                 }
             }
             return RedirectToAction("Ingredients", "Recipes");
+        }
+
+        public ActionResult RemoveIngredient(int recipeID, int ingredientID) 
+        {
+            using (Entities context = new Entities())
+            {
+                //find ingredient
+                var ingredient = context.Recipe_Ingredient.Single(x => x.id_recipe == recipeID && x.id_ingredient == ingredientID);
+                //remove ingredient
+                context.Recipe_Ingredient.Remove(ingredient);
+                //save changes in database
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("Recipe", "Recipes", new { id = recipeID });
         }
 
         public ActionResult Ingredients()

@@ -26,31 +26,50 @@ namespace Semestralka.Controllers
         [HttpPost]
         public ActionResult Index(User user)
         {
-            using(Entities kucharkaEntities = new Entities())
+            try
             {
-                IPasswordHasher hasher = new PasswordHasher();
-                user.password = hasher.HashPassword(user.password);
-
-                //sends data into database
-                kucharkaEntities.Users.Add(user);
-                //save changes in database
-                kucharkaEntities.SaveChanges();
-                //initialization variable for error message
-                string message = string.Empty;
-
-                //storing information message into variable depending on value returned from databse procedure
-                switch (user.id_user)
+                using (Entities context = new Entities())
                 {
-                    case -1:
-                        message = "Username already exists.\\nPlease choose a different username.";
-                        break;
-                    case -2:
-                        message = "Supplied email address has already been used.";
-                        break;
-                    default:
-                        message = "Registration successful.\\nUser Id: " + user.id_user.ToString();
-                        break;
-                }  
+                    IPasswordHasher hasher = new PasswordHasher();
+                    user.password = hasher.HashPassword(user.password);
+
+                    //sends data into database
+                    context.Users.Add(user);
+                    //save changes in database
+                    context.SaveChanges();
+                    //initialization variable for error message
+                    string message = string.Empty;
+
+                    //storing information message into variable depending on value returned from databse procedure
+                    switch (user.id_user)
+                    {
+                        case -1:
+                            ModelState.AddModelError("Username", "Uživatelské jméno již existuje");
+                            break;
+                        default:
+                            message = "Registration successful.\\nUser Id: " + user.id_user.ToString();
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if(ex.Message.Contains("password"))
+                {
+                    ModelState.AddModelError("Password", "Heslo musí být vyplněné");
+                }
+                if(user.username == null)
+                {
+                    ModelState.AddModelError("Username", "Uživatelské jméno musí být vyplněné");
+                }
+                if (user.firstname == null)
+                {
+                    ModelState.AddModelError("Firstname", "Jméno musí být vyplněné");
+                }
+                if (user.lastname == null)
+                {
+                    ModelState.AddModelError("Lastname", "Příjmení musí být vyplněné");
+                }
             }
             return View();
         }

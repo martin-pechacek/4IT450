@@ -29,10 +29,13 @@
           <Property Name="name_recipe" Type="varchar" MaxLength="1024" Nullable="false" />
           <Property Name="instructions" Type="varchar" MaxLength="2048" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Relationship_2">
           <Key>
             <PropertyRef Name="id_recipe" />
             <PropertyRef Name="id_ingredient" />
+            
           </Key>
           <Property Name="id_recipe" Type="smallint" Nullable="false" />
           <Property Name="id_ingredient" Type="smallint" Nullable="false" />
@@ -42,7 +45,7 @@
           <Key>
             <PropertyRef Name="id_user" />
           </Key>
-          <Property Name="id_user" Type="smallint" Nullable="false" />
+          <Property Name="id_user" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="1024" Nullable="false" />
           <Property Name="firstname" Type="varchar" MaxLength="128" Nullable="false" />
@@ -88,6 +91,10 @@
         <Function Name="category_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="name_category" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="Delete_Recipe_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_ingredient" Type="int" Mode="In" />
+          <Parameter Name="id_recipe" Type="int" Mode="In" />
+        </Function>
         <Function Name="Insert_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="name_category" Type="varchar" Mode="In" />
         </Function>
@@ -116,8 +123,14 @@
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Recipe" EntityType="Self.Recipe" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Relationship_2" EntityType="Self.Relationship_2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Relationship_2" EntityType="Self.Relationship_2" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Relationship_2].[id_recipe] AS [id_recipe], 
+    [Relationship_2].[id_ingredient] AS [id_ingredient], 
+    [Relationship_2].[amount] AS [amount]
+    FROM [dbo].[Relationship_2] AS [Relationship_2]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_RECIPE_RELATIONS_CATEGORY" Association="Self.FK_RECIPE_RELATIONS_CATEGORY">
             <End Role="Category" EntitySet="Category" />
             <End Role="Recipe" EntitySet="Recipe" />
@@ -135,19 +148,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="KucharkaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="id_user" />
-          </Key>
-          <Property Name="id_user" Type="Int16" Nullable="false" />
-          <Property Name="username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="password" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="firstname" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="lastname" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="user_right" Type="Boolean" Nullable="false" />
-        </EntityType>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Users" EntityType="KucharkaModel.User" />
           <FunctionImport Name="Insert_User">
             <Parameter Name="username" Mode="In" Type="String" />
             <Parameter Name="password" Mode="In" Type="String" />
@@ -198,6 +199,30 @@
             <Parameter Name="id_recipe" Mode="In" Type="Int16" />
             <Parameter Name="id_ingredient" Mode="In" Type="Int16" />
             <Parameter Name="amount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Delete_Recipe_Ingredient">
+            <Parameter Name="id_ingredient" Mode="In" Type="Int32" />
+            <Parameter Name="id_recipe" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Recipe_Ingredient3" ReturnType="Collection(Int32)">
+            <Parameter Name="id_recipe" Mode="In" Type="Int16" />
+            <Parameter Name="id_ingredient" Mode="In" Type="Int16" />
+            <Parameter Name="amount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_User1" ReturnType="Collection(Int32)">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="firstname" Mode="In" Type="String" />
+            <Parameter Name="lastname" Mode="In" Type="String" />
+            <Parameter Name="user_right" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="Users" EntityType="KucharkaModel.User" />
+          <FunctionImport Name="Insert_User2" ReturnType="Collection(Int32)">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="firstname" Mode="In" Type="String" />
+            <Parameter Name="lastname" Mode="In" Type="String" />
+            <Parameter Name="user_right" Mode="In" Type="Boolean" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Category">
@@ -275,37 +300,23 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id_user" />
+          </Key>
+          <Property Name="id_user" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="firstname" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="lastname" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="user_right" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="KucharkaModelStoreContainer" CdmEntityContainer="Entities">
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="KucharkaModel.User">
-              <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="id_user" ColumnName="id_user" />
-                <ScalarProperty Name="username" ColumnName="username" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="firstname" ColumnName="firstname" />
-                <ScalarProperty Name="lastname" ColumnName="lastname" />
-                <ScalarProperty Name="user_right" ColumnName="user_right" />
-              </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="KucharkaModel.User">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KucharkaModel.Store.Insert_User">
-                  <ScalarProperty Name="user_right" ParameterName="user_right" />
-                  <ScalarProperty Name="lastname" ParameterName="lastname" />
-                  <ScalarProperty Name="firstname" ParameterName="firstname" />
-                  <ScalarProperty Name="password" ParameterName="password" />
-                  <ScalarProperty Name="username" ParameterName="username" />
-                  <ResultBinding Name="id_user" ColumnName="id_user" />
-                </InsertFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="Insert_User" FunctionName="KucharkaModel.Store.Insert_User" />
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="KucharkaModel.Category">
               <MappingFragment StoreEntitySet="Category">
@@ -376,6 +387,10 @@
             </EntityTypeMapping>
             <EntityTypeMapping TypeName="KucharkaModel.Recipe_Ingredient">
               <ModificationFunctionMapping>
+                <DeleteFunction FunctionName="KucharkaModel.Store.Delete_Recipe_Ingredient">
+                  <ScalarProperty Name="id_recipe" ParameterName="id_recipe" />
+                  <ScalarProperty Name="id_ingredient" ParameterName="id_ingredient" />
+                </DeleteFunction>
                 <InsertFunction FunctionName="KucharkaModel.Store.Insert_Recipe_Ingredient">
                   <ScalarProperty Name="amount" ParameterName="amount" />
                   <ScalarProperty Name="id_ingredient" ParameterName="id_ingredient" />
@@ -385,7 +400,33 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="Insert_Ingredient" FunctionName="KucharkaModel.Store.Insert_Ingredient" />
-          <FunctionImportMapping FunctionImportName="Insert_Recipe_Ingredient2" FunctionName="KucharkaModel.Store.Insert_Recipe_Ingredient" />
+          <FunctionImportMapping FunctionImportName="Delete_Recipe_Ingredient" FunctionName="KucharkaModel.Store.Delete_Recipe_Ingredient" />
+          <FunctionImportMapping FunctionImportName="Insert_Recipe_Ingredient3" FunctionName="KucharkaModel.Store.Insert_Recipe_Ingredient" />
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="KucharkaModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="user_right" ColumnName="user_right" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="id_user" ColumnName="id_user" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="KucharkaModel.User">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KucharkaModel.Store.Insert_User">
+                  <ScalarProperty Name="user_right" ParameterName="user_right" />
+                  <ScalarProperty Name="lastname" ParameterName="lastname" />
+                  <ScalarProperty Name="firstname" ParameterName="firstname" />
+                  <ScalarProperty Name="password" ParameterName="password" />
+                  <ScalarProperty Name="username" ParameterName="username" />
+                  <ResultBinding Name="id_user" ColumnName="id_user" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Insert_User2" FunctionName="KucharkaModel.Store.Insert_User" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

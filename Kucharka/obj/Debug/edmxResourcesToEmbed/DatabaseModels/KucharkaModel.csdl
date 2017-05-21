@@ -1,18 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="KucharkaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-  <EntityType Name="User">
-    <Key>
-      <PropertyRef Name="id_user" />
-    </Key>
-    <Property Name="id_user" Type="Int16" Nullable="false" />
-    <Property Name="username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="password" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="firstname" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="lastname" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="user_right" Type="Boolean" Nullable="false" />
-  </EntityType>
   <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="Users" EntityType="KucharkaModel.User" />
     <FunctionImport Name="Insert_User">
       <Parameter Name="username" Mode="In" Type="String" />
       <Parameter Name="password" Mode="In" Type="String" />
@@ -63,6 +51,30 @@
       <Parameter Name="id_recipe" Mode="In" Type="Int16" />
       <Parameter Name="id_ingredient" Mode="In" Type="Int16" />
       <Parameter Name="amount" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Delete_Recipe_Ingredient">
+      <Parameter Name="id_ingredient" Mode="In" Type="Int32" />
+      <Parameter Name="id_recipe" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Insert_Recipe_Ingredient3" ReturnType="Collection(Int32)">
+      <Parameter Name="id_recipe" Mode="In" Type="Int16" />
+      <Parameter Name="id_ingredient" Mode="In" Type="Int16" />
+      <Parameter Name="amount" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Insert_User1" ReturnType="Collection(Int32)">
+      <Parameter Name="username" Mode="In" Type="String" />
+      <Parameter Name="password" Mode="In" Type="String" />
+      <Parameter Name="firstname" Mode="In" Type="String" />
+      <Parameter Name="lastname" Mode="In" Type="String" />
+      <Parameter Name="user_right" Mode="In" Type="Boolean" />
+    </FunctionImport>
+    <EntitySet Name="Users" EntityType="KucharkaModel.User" />
+    <FunctionImport Name="Insert_User2" ReturnType="Collection(Int32)">
+      <Parameter Name="username" Mode="In" Type="String" />
+      <Parameter Name="password" Mode="In" Type="String" />
+      <Parameter Name="firstname" Mode="In" Type="String" />
+      <Parameter Name="lastname" Mode="In" Type="String" />
+      <Parameter Name="user_right" Mode="In" Type="Boolean" />
     </FunctionImport>
   </EntityContainer>
   <EntityType Name="Category">
@@ -140,4 +152,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="id_user" />
+    </Key>
+    <Property Name="id_user" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="false" />
+    <Property Name="firstname" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="lastname" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="user_right" Type="Boolean" Nullable="false" />
+  </EntityType>
 </Schema>

@@ -17,10 +17,12 @@
         @*Label and textbox for username*@
         @Html.LabelFor(m => m.username)
         @Html.TextBoxFor(m => m.username)
+        @Html.ValidationMessage("Username")
 
         @*Label and textbox for username*@
         @Html.LabelFor(m => m.password)
         @Html.PasswordFor(m => m.password)
+        @Html.ValidationMessage("Password")
 
         @*Login button*@
         <input type="submit" value="Login"/>

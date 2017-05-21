@@ -13,7 +13,7 @@ namespace Semestralka.Models
         public string username { get; set; }
 
         [Required]
-        [Display(Name = "Password")]
+        [Display(Name = "Heslo")]
         public string password { get; set; }
     }
 }

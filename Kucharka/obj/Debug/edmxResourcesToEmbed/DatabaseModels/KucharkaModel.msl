@@ -1,31 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="KucharkaModelStoreContainer" CdmEntityContainer="Entities">
-    <EntitySetMapping Name="Users">
-      <EntityTypeMapping TypeName="KucharkaModel.User">
-        <MappingFragment StoreEntitySet="User">
-          <ScalarProperty Name="id_user" ColumnName="id_user" />
-          <ScalarProperty Name="username" ColumnName="username" />
-          <ScalarProperty Name="password" ColumnName="password" />
-          <ScalarProperty Name="firstname" ColumnName="firstname" />
-          <ScalarProperty Name="lastname" ColumnName="lastname" />
-          <ScalarProperty Name="user_right" ColumnName="user_right" />
-        </MappingFragment>
-      </EntityTypeMapping>
-      <EntityTypeMapping TypeName="KucharkaModel.User">
-        <ModificationFunctionMapping>
-          <InsertFunction FunctionName="KucharkaModel.Store.Insert_User">
-            <ScalarProperty Name="user_right" ParameterName="user_right" />
-            <ScalarProperty Name="lastname" ParameterName="lastname" />
-            <ScalarProperty Name="firstname" ParameterName="firstname" />
-            <ScalarProperty Name="password" ParameterName="password" />
-            <ScalarProperty Name="username" ParameterName="username" />
-            <ResultBinding Name="id_user" ColumnName="id_user" />
-          </InsertFunction>
-        </ModificationFunctionMapping>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="Insert_User" FunctionName="KucharkaModel.Store.Insert_User" />
     <EntitySetMapping Name="Categories">
       <EntityTypeMapping TypeName="KucharkaModel.Category">
         <MappingFragment StoreEntitySet="Category">
@@ -96,6 +71,10 @@
       </EntityTypeMapping>
       <EntityTypeMapping TypeName="KucharkaModel.Recipe_Ingredient">
         <ModificationFunctionMapping>
+          <DeleteFunction FunctionName="KucharkaModel.Store.Delete_Recipe_Ingredient">
+            <ScalarProperty Name="id_recipe" ParameterName="id_recipe" />
+            <ScalarProperty Name="id_ingredient" ParameterName="id_ingredient" />
+          </DeleteFunction>
           <InsertFunction FunctionName="KucharkaModel.Store.Insert_Recipe_Ingredient">
             <ScalarProperty Name="amount" ParameterName="amount" />
             <ScalarProperty Name="id_ingredient" ParameterName="id_ingredient" />
@@ -105,6 +84,32 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="Insert_Ingredient" FunctionName="KucharkaModel.Store.Insert_Ingredient" />
-    <FunctionImportMapping FunctionImportName="Insert_Recipe_Ingredient2" FunctionName="KucharkaModel.Store.Insert_Recipe_Ingredient" />
+    <FunctionImportMapping FunctionImportName="Delete_Recipe_Ingredient" FunctionName="KucharkaModel.Store.Delete_Recipe_Ingredient" />
+    <FunctionImportMapping FunctionImportName="Insert_Recipe_Ingredient3" FunctionName="KucharkaModel.Store.Insert_Recipe_Ingredient" />
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="KucharkaModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="user_right" ColumnName="user_right" />
+          <ScalarProperty Name="lastname" ColumnName="lastname" />
+          <ScalarProperty Name="firstname" ColumnName="firstname" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="id_user" ColumnName="id_user" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="KucharkaModel.User">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="KucharkaModel.Store.Insert_User">
+            <ScalarProperty Name="user_right" ParameterName="user_right" />
+            <ScalarProperty Name="lastname" ParameterName="lastname" />
+            <ScalarProperty Name="firstname" ParameterName="firstname" />
+            <ScalarProperty Name="password" ParameterName="password" />
+            <ScalarProperty Name="username" ParameterName="username" />
+            <ResultBinding Name="id_user" ColumnName="id_user" />
+          </InsertFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Insert_User2" FunctionName="KucharkaModel.Store.Insert_User" />
   </EntityContainerMapping>
 </Mapping>

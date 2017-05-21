@@ -11,6 +11,10 @@
 
 @using (Html.BeginForm("Index", "Recipes", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
+    
+    @Html.ValidationSummary(true, "The following errors occurred:", "p");
+    
     <div class="form-group">
         @*Label and textbox for recipe name*@
         @Html.LabelFor(m => m.Name_recipe)

@@ -5,7 +5,6 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="b7068059fbe3499d986458b4f91b79b9" Name="Diagram1">
-        <EntityTypeShape EntityType="KucharkaModel.User" Width="1.5" PointX="4.75" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="KucharkaModel.Category" Width="1.5" PointX="6.375" PointY="1.125" />
         <EntityTypeShape EntityType="KucharkaModel.Ingredient" Width="1.5" PointX="13.125" PointY="0.875" />
         <EntityTypeShape EntityType="KucharkaModel.Recipe" Width="1.5" PointX="8.625" PointY="0.875" />
@@ -13,6 +12,7 @@
         <EntityTypeShape EntityType="KucharkaModel.Recipe_Ingredient" Width="1.5" PointX="11" PointY="1" />
         <AssociationConnector Association="KucharkaModel.FK_RELATION_RELATIONS_INGREDIE" />
         <AssociationConnector Association="KucharkaModel.FK_RELATION_RELATIONS_RECIPE" />
+        <EntityTypeShape EntityType="KucharkaModel.User" Width="1.5" PointX="2.625" PointY="1.875" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

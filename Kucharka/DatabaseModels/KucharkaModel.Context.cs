@@ -27,11 +27,11 @@ namespace Semestralka.DatabaseModels
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Ingredient> Ingredients { get; set; }
         public virtual DbSet<Recipe> Recipes { get; set; }
         public virtual DbSet<Recipe_Ingredient> Recipe_Ingredient { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     
         public virtual int Insert_User(string username, string password, string firstname, string lastname, Nullable<bool> user_right)
         {
@@ -147,6 +147,86 @@ namespace Semestralka.DatabaseModels
                 new ObjectParameter("amount", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Insert_Recipe_Ingredient2", id_recipeParameter, id_ingredientParameter, amountParameter);
+        }
+    
+        public virtual int Delete_Recipe_Ingredient(Nullable<int> id_ingredient, Nullable<int> id_recipe)
+        {
+            var id_ingredientParameter = id_ingredient.HasValue ?
+                new ObjectParameter("id_ingredient", id_ingredient) :
+                new ObjectParameter("id_ingredient", typeof(int));
+    
+            var id_recipeParameter = id_recipe.HasValue ?
+                new ObjectParameter("id_recipe", id_recipe) :
+                new ObjectParameter("id_recipe", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Delete_Recipe_Ingredient", id_ingredientParameter, id_recipeParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> Insert_Recipe_Ingredient3(Nullable<short> id_recipe, Nullable<short> id_ingredient, Nullable<int> amount)
+        {
+            var id_recipeParameter = id_recipe.HasValue ?
+                new ObjectParameter("id_recipe", id_recipe) :
+                new ObjectParameter("id_recipe", typeof(short));
+    
+            var id_ingredientParameter = id_ingredient.HasValue ?
+                new ObjectParameter("id_ingredient", id_ingredient) :
+                new ObjectParameter("id_ingredient", typeof(short));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Insert_Recipe_Ingredient3", id_recipeParameter, id_ingredientParameter, amountParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> Insert_User1(string username, string password, string firstname, string lastname, Nullable<bool> user_right)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            var firstnameParameter = firstname != null ?
+                new ObjectParameter("firstname", firstname) :
+                new ObjectParameter("firstname", typeof(string));
+    
+            var lastnameParameter = lastname != null ?
+                new ObjectParameter("lastname", lastname) :
+                new ObjectParameter("lastname", typeof(string));
+    
+            var user_rightParameter = user_right.HasValue ?
+                new ObjectParameter("user_right", user_right) :
+                new ObjectParameter("user_right", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Insert_User1", usernameParameter, passwordParameter, firstnameParameter, lastnameParameter, user_rightParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> Insert_User2(string username, string password, string firstname, string lastname, Nullable<bool> user_right)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            var firstnameParameter = firstname != null ?
+                new ObjectParameter("firstname", firstname) :
+                new ObjectParameter("firstname", typeof(string));
+    
+            var lastnameParameter = lastname != null ?
+                new ObjectParameter("lastname", lastname) :
+                new ObjectParameter("lastname", typeof(string));
+    
+            var user_rightParameter = user_right.HasValue ?
+                new ObjectParameter("user_right", user_right) :
+                new ObjectParameter("user_right", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Insert_User2", usernameParameter, passwordParameter, firstnameParameter, lastnameParameter, user_rightParameter);
         }
     }
 }
