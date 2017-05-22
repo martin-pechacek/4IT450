@@ -220,9 +220,10 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Login.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
-    <Content Include="Views\Recipes\index.cshtml" />
+    <Content Include="Views\Recipes\Index.cshtml" />
     <Content Include="Views\Recipes\Ingredients.cshtml" />
     <Content Include="Views\Recipes\Recipe.cshtml" />
+    <Content Include="Views\Categories\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

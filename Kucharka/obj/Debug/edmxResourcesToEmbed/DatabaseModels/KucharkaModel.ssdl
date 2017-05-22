@@ -85,6 +85,9 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
   <Function Name="category_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="name_category" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="Delete_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id_ingredient" Type="int" Mode="In" />
+  </Function>
   <Function Name="Delete_Recipe_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="id_ingredient" Type="int" Mode="In" />
     <Parameter Name="id_recipe" Type="int" Mode="In" />
@@ -112,6 +115,10 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
     <Parameter Name="firstname" Type="varchar" Mode="In" />
     <Parameter Name="lastname" Type="varchar" Mode="In" />
     <Parameter Name="user_right" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="Update_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id_category" Type="int" Mode="In" />
+    <Parameter Name="name_category" Type="varchar" Mode="In" />
   </Function>
   <EntityContainer Name="KucharkaModelStoreContainer">
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />

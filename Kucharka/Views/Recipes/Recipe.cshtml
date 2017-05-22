@@ -29,6 +29,9 @@
 </table>
 
 @*Ingredients*@
+
+if (Enumerable.Count(ViewBag.Ingredients) != 0)
+{    
 <p>Ingredience</p>
 <table class="table">
     <tbody>
@@ -39,7 +42,7 @@
                 <td>@ViewBag.IngredientUnits[i]</td>
                 <td>@ViewBag.IngredientsNames[i]</td>
                 <td>
-                    <a href="@Url.Action("RemoveIngredient", "Recipes", new { ingredientID = ViewBag.Ingredients[i].IngredientID, recipeID = @Model.RecipeModel.Id_recipe })">
+                    <a href="@Url.Action("RemoveRecipeIngredient", "Recipes", new { ingredientID = ViewBag.Ingredients[i].IngredientID, recipeID = @Model.RecipeModel.Id_recipe })">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </td>
@@ -47,8 +50,9 @@
         }
     </tbody>
 </table>
+}
 
-@*Dropdown for category *@
+@*Dropdown for ingredients *@
     @Html.DropDownListFor(m => m.IngredientModel.Id_ingredient, (List<SelectListItem>)ViewBag.IngredientsDropDown,
         new
         {
@@ -58,5 +62,6 @@
     
     @Html.TextBoxFor(m => m.RecipeIngredient.Amount)
     @ViewBag.Unit
+    
    <input type="submit" value="Přidat" name="Add"/>
 }

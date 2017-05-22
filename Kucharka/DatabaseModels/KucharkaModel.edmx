@@ -91,6 +91,9 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
         <Function Name="category_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="name_category" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="Delete_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_ingredient" Type="int" Mode="In" />
+        </Function>
         <Function Name="Delete_Recipe_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id_ingredient" Type="int" Mode="In" />
           <Parameter Name="id_recipe" Type="int" Mode="In" />
@@ -118,6 +121,10 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
           <Parameter Name="firstname" Type="varchar" Mode="In" />
           <Parameter Name="lastname" Type="varchar" Mode="In" />
           <Parameter Name="user_right" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="Update_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_category" Type="int" Mode="In" />
+          <Parameter Name="name_category" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="KucharkaModelStoreContainer">
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
@@ -223,6 +230,13 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
             <Parameter Name="firstname" Mode="In" Type="String" />
             <Parameter Name="lastname" Mode="In" Type="String" />
             <Parameter Name="user_right" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="Delete_Ingredient">
+          <Parameter Name="id_ingredient" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Update_Category">
+            <Parameter Name="id_category" Mode="In" Type="Int32" />
+            <Parameter Name="name_category" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Category">
@@ -333,6 +347,10 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
                 <DeleteFunction FunctionName="KucharkaModel.Store.category_Delete">
                   <ScalarProperty Name="name_category" ParameterName="name_category" />
                 </DeleteFunction>
+                <UpdateFunction FunctionName="KucharkaModel.Store.Update_Category">
+                  <ScalarProperty Name="name_category" ParameterName="name_category" Version="Current" />
+                  <ScalarProperty Name="id_category" ParameterName="id_category" Version="Current" />
+                </UpdateFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -351,6 +369,9 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
                   <ScalarProperty Name="name_ingredient" ParameterName="name_ingredient" />
                   <ResultBinding Name="id_ingredient" ColumnName="id_ingredient" />
                 </InsertFunction>
+                <DeleteFunction FunctionName="KucharkaModel.Store.Delete_Ingredient">
+                  <ScalarProperty Name="id_ingredient" ParameterName="id_ingredient" />
+                </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -427,6 +448,8 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="Insert_User2" FunctionName="KucharkaModel.Store.Insert_User" />
+          <FunctionImportMapping FunctionImportName="Delete_Ingredient" FunctionName="KucharkaModel.Store.Delete_Ingredient" />
+          <FunctionImportMapping FunctionImportName="Update_Category" FunctionName="KucharkaModel.Store.Update_Category" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

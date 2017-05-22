@@ -12,6 +12,8 @@
 @using (Html.BeginForm("Login", "Users", FormMethod.Post))
 {
     @Html.AntiForgeryToken();
+
+    @Html.ValidationSummary(true, "", "p");
     
     <div class="form-group">
         @*Label and textbox for username*@

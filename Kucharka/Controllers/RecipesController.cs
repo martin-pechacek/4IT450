@@ -201,7 +201,7 @@ namespace Semestralka.Controllers
             return RedirectToAction("Ingredients", "Recipes");
         }
 
-        public ActionResult RemoveIngredient(int recipeID, int ingredientID) 
+        public ActionResult RemoveRecipeIngredient(int recipeID, int ingredientID) 
         {
             using (Entities context = new Entities())
             {
@@ -216,9 +216,39 @@ namespace Semestralka.Controllers
             return RedirectToAction("Recipe", "Recipes", new { id = recipeID });
         }
 
-        public ActionResult Ingredients()
+        public async Task<ActionResult> Ingredients()
         {
+            List<IngredientsDO> ingredients = await IngredientsDO.GetIngredientsAsync();
+
+            ViewBag.Ingredients = ingredients;
+
             return View();
+        }
+
+        public async Task<ActionResult> RemoveIngredient(int id)
+        {
+            try 
+            {
+                using (Entities context = new Entities())
+                {
+                    //find ingredient
+                    var ingredient = context.Ingredients.Single(x => x.id_ingredient == id);
+                    //remove ingredient
+                    context.Ingredients.Remove(ingredient);
+                    //save changes in database
+                    context.SaveChanges();
+                }
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Ingredience nelze smazat. Používá se u některého z receptů");
+            }
+
+            List<IngredientsDO> ingredients = await IngredientsDO.GetIngredientsAsync();
+
+            ViewBag.Ingredients = ingredients;
+
+            return View("Ingredients");
         }
 	}
 }

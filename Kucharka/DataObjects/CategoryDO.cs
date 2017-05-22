@@ -26,5 +26,15 @@ namespace Semestralka.DataObjects
                     }).ToListAsync();
             }
         }
+
+        public static async Task<Category> GetCategoryAsync(int id)
+        {
+            using (Entities context =
+                new Entities())
+            {
+                return await context.Categories
+                    .SingleAsync(x => x.id_category == id);
+            }
+        }
     }
 }

@@ -1,0 +1,16 @@
+﻿@using Semestralka.Models
+
+@model CategoryModel
+
+@{
+    ViewBag.Title = "Upravit kategorii";
+}
+
+<h2>Edit</h2>
+
+@using(Html.BeginForm("Edit", "Categories", FormMethod.Post))
+{
+    @Html.TextBoxFor(m => m.name_category, new { Value = @ViewBag.Category.name_category })
+    
+    <input type="submit" name="add" value="Uložit"/>
+}

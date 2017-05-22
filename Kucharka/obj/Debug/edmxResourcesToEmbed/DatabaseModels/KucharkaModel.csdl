@@ -76,6 +76,13 @@
       <Parameter Name="lastname" Mode="In" Type="String" />
       <Parameter Name="user_right" Mode="In" Type="Boolean" />
     </FunctionImport>
+    <FunctionImport Name="Delete_Ingredient">
+      <Parameter Name="id_ingredient" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Update_Category">
+      <Parameter Name="id_category" Mode="In" Type="Int32" />
+      <Parameter Name="name_category" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="Category">
     <Key>

@@ -27,30 +27,31 @@ namespace Semestralka.Controllers
         *  Method for inserting new category into database
         **/
         [HttpPost]
-        public async Task<ActionResult> Index(Category category)
+        public async Task<ActionResult> Index(Category category, string add)
         {
             await Task.Delay(0);
 
             using (Entities kucharkaEntities = new Entities())
             {
-                //sends data into database
-                kucharkaEntities.Categories.Add(category);
-                //save changes in database
-                kucharkaEntities.SaveChanges();
-                //initialization variable for error message
-                string message = string.Empty;
+               //sends data into database
+               kucharkaEntities.Categories.Add(category);
+               //save changes in database
+               kucharkaEntities.SaveChanges();
+               //initialization variable for error message
+               string message = string.Empty;
 
-                //storing information message into variable depending on value returned from databse procedure
-                switch (category.id_category)
-                {
+               //storing information message into variable depending on value returned from databse procedure
+               switch (category.id_category)
+               {
                     case -1:
-                        message = "Kategorie již existuje.\\nVyberte jiné jméno.";
-                        break;
+                       message = "Kategorie již existuje.\\nVyberte jiné jméno.";
+                       break;
                     default:
                         message = "Kategorie přidána.\\nId: " + category.id_category.ToString();
                         break;
                 }
             }
+           
             return RedirectToAction("Index", "Categories");
         }
 
@@ -70,6 +71,39 @@ namespace Semestralka.Controllers
             }
 
             return RedirectToAction("Index", "Categories");
+        }
+
+        public async Task<ActionResult> Edit(int? id, string add, CategoryModel model) 
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index", "Categories");
+            }
+            else
+            {
+                Category category = await CategoryDO.GetCategoryAsync((int)id);
+
+                @ViewBag.Category = category;
+
+                if (add != null)
+                {
+                    using (Entities context = new Entities())
+                    {
+                        //find category
+                        var categoryRecord = context.Categories.Single(x => x.id_category == id);
+                        //set new category name
+                        categoryRecord.name_category = model.name_category;
+                        //save change in db
+                        context.SaveChanges();
+
+                        return RedirectToAction("Index", "Categories");
+                    }
+                }
+                else 
+                {
+                    return View();
+                }                              
+            }
         }
 	}
 }

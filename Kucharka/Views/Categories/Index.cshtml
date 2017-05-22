@@ -30,6 +30,11 @@
                    <tr>
                        <td>@category.CategoryName</td>
                        <td>
+                           <a href="@Url.Action("Edit", "Categories", new { id = @category.CategoryID })">
+                               <span class="glyphicon glyphicon-edit"></span>
+                           </a>
+                       </td>
+                       <td>
                            <a href="@Url.Action("Remove", "Categories", new { categoryName = @category.CategoryName })">
                                <span class="glyphicon glyphicon-remove" ></span>
                            </a>

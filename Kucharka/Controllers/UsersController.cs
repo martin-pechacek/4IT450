@@ -95,13 +95,10 @@ namespace Semestralka.Controllers
             {
                 //initialize new UserManager object
                 UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(new UserStore());
-
-                //find user
-                var user = await userManager.FindAsync(model.username, model.password);
-
-                //if user exists proceed login. If not, show error message
-                if(user != null)
-                {
+                try {
+                    //find user
+                    var user = await userManager.FindAsync(model.username, model.password);
+                    
                     HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
 
                     var identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
@@ -109,10 +106,10 @@ namespace Semestralka.Controllers
                     HttpContext.GetOwinContext().Authentication.SignIn(identity);
 
                     return RedirectToAction("Index", "Home");
-                } 
-                else
+                }
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, "Chybně zadané uživatelské jméno, nebo heslo");
+                    ModelState.AddModelError(string.Empty, "Špatně zadané uživatelské jméno, nebo heslo");
                 }
             }
             return View(model);

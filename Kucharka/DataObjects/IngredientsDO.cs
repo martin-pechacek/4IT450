@@ -27,6 +27,7 @@ namespace Semestralka.DataObjects
                     {
                         IngredientID = x.id_ingredient,
                         IngredientName = x.name_ingredient,
+                        Unit = x.unit
                     }).ToListAsync();
             }
         }
@@ -76,10 +77,17 @@ namespace Semestralka.DataObjects
 
             IngredientsDO ingredientDO = new IngredientsDO();
 
-            using (Entities context = new Entities())
+            try
             {
-                Ingredient ingredient = context.Ingredients.First();
-                ingredientDO.Unit = ingredient.unit;
+                using (Entities context = new Entities())
+                {
+                    Ingredient ingredient = context.Ingredients.First();
+                    ingredientDO.Unit = ingredient.unit;
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
             }
 
             return ingredientDO;

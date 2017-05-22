@@ -1,4 +1,5 @@
 ﻿@using Semestralka.Models;
+@using Semestralka.DataObjects;
 
 @model IngredientModel
 
@@ -7,6 +8,28 @@
 }
 
 <h2>Ingredients</h2>
+
+@Html.ValidationSummary(true, "", "p")
+
+@*List of categories*@
+<table class="table">
+    <tbody>
+        @foreach (IngredientsDO ingredient in ViewBag.ingredients)
+        {
+            <tr>
+                <td>@ingredient.IngredientName</td>
+                <td>@ingredient.Unit</td>
+                <td>
+                    <a href="@Url.Action("RemoveIngredient", "Recipes", new { id = @ingredient.IngredientID })">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
 
 @using (Html.BeginForm("Ingredients", "Recipes", FormMethod.Post))
 {
