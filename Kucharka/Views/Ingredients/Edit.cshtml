@@ -1,0 +1,21 @@
+﻿@using Semestralka.Models;
+@using Semestralka.DataObjects;
+
+@model IngredientModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "Ingredients", FormMethod.Post))
+{
+    @Html.LabelFor(m => m.Name_ingredient)
+    @Html.TextBoxFor(m => m.Name_ingredient  , new { Value = @ViewBag.Ingredient.name_ingredient })
+    
+    @Html.LabelFor(m => m.Unit)
+    @Html.TextBoxFor(m => m.Unit  , new { Value = @ViewBag.Ingredient.unit })
+
+    <input type="submit" name="edit" value="Uložit" />
+}

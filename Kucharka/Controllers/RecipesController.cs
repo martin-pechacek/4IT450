@@ -19,7 +19,11 @@ namespace Semestralka.Controllers
         // GET: /Recipes/
         public async Task<ActionResult> Index(RecipeModel model)
         {
+            List<RecipeDO> recipes = await RecipeDO.GetRecipesAsync();
+            
             List<CategoryDO> categories = await CategoryDO.GetCategoriesAsync();
+
+            ViewBag.RecipesList = recipes;
 
             ViewBag.CategoryList = categories
                 .Select(x => new SelectListItem()
@@ -33,10 +37,10 @@ namespace Semestralka.Controllers
         }
 
         /**
-        *  Method for inserting new recipe into database
+        *  Method for inserting new recipe into database (without ingredients)
         **/
         [HttpPost]
-        public async Task<ActionResult> Index(Recipe recipe)
+        public async Task<ActionResult> Index(Recipe recipe, string add)
         {
             await Task.Delay(0);
 
@@ -63,16 +67,34 @@ namespace Semestralka.Controllers
             return RedirectToAction("Recipe", "Recipes", new { id = recipe.id_recipe });
         }
 
+        /**
+         *  Method for adding ingredient to recipe and refreshing unit label in case selection new value in DropDown 
+        **/
         [HttpPost]
         public async Task<ActionResult> Recipe(RecipeDetailModel model, string add, Recipe_Ingredient recipeIngredient)
         {
             int id = int.Parse(model.IngredientModel.Id_ingredient);
 
+            //Get one recipe depending on id
+            Recipe recipe = await RecipeDO.GetRecipeAsync(model.RecipeModel.Id_recipe);
+
+            model.RecipeModel = new RecipeModel()
+            {
+                Id_recipe = recipe.id_recipe,
+                Id_category = recipe.id_category,
+                Name_recipe = recipe.name_recipe,
+                Instructions = recipe.instructions
+            };
+
+            List<CategoryDO> categories = await CategoryDO.GetCategoriesAsync();
+
+            Category category = await CategoryDO.GetCategoryAsync(model.RecipeModel.Id_category);
+
+            ViewBag.Category = category;
+
             IngredientsDO unit = await IngredientsDO.GetUnitAsync(id);
 
             ViewBag.Unit = unit.Unit;
-
-            Recipe recipe = await RecipeDO.GetRecipeAsync(model.RecipeModel.Id_recipe);
 
             ViewBag.Recipe = recipe;
 
@@ -96,21 +118,18 @@ namespace Semestralka.Controllers
             {
                 using (Entities context = new Entities())
                 {
-                    //initialization variable for error message
-                    string message = string.Empty;
-
                     //find ingredient
                     try
                     {
                         var ingredient = context.Recipe_Ingredient.Single(x => x.id_recipe == recipeIngredient.id_recipe && x.id_ingredient == recipeIngredient.id_ingredient);
-                        message = "Ingredience již existuje.\\n";
                     }
                     catch(Exception ex)
                     {
-                        //message = ex.Message;
-                        //sends data into database
+                        //this code block is in catch clause to prevent multiple adding same ingredient. (Single() returns null => ingredient is was not added before)  
+
+                        //send data into database
                         context.Recipe_Ingredient.Add(recipeIngredient);
-                        //save changes in database
+                        //save change in database
                         context.SaveChanges();
                     }
                 }
@@ -127,30 +146,32 @@ namespace Semestralka.Controllers
         **/
         public async Task<ActionResult> Recipe(int? id)
         {
-            if(id == null)
+            //Initialize model
+            RecipeDetailModel model = new RecipeDetailModel();
+            try
             {
-                return RedirectToAction("Index", "Home");
-            }
-            else 
-            { 
-
-                //Initialize model
-                RecipeDetailModel model = new RecipeDetailModel();
-                //Get one re cipe depending on id
+                //Get one recipe depending on id
                 Recipe recipe = await RecipeDO.GetRecipeAsync((int)id);
-            
+
                 model.RecipeModel = new RecipeModel()
                 {
                     Id_recipe = recipe.id_recipe,
-                    Id_category = Convert.ToString(recipe.id_category),
+                    Id_category = recipe.id_category,
                     Name_recipe = recipe.name_recipe,
                     Instructions = recipe.instructions
                 };
 
+                Category category = await CategoryDO.GetCategoryAsync(model.RecipeModel.Id_category);
+
+                ViewBag.Category = category;
+
                 //unit which shows next to the textbox for amount of ingredient. Used only for first loading
                 IngredientsDO unit = await IngredientsDO.GetFirstUnitAsync();
 
-                List<RecipeIngredientsDO> ingredientsList = await RecipeIngredientsDO.GetIngredientsAsync(recipe.id_recipe);            
+                List<RecipeIngredientsDO> ingredientsList = await RecipeIngredientsDO.GetIngredientsAsync(recipe.id_recipe);
+
+                //Used for displaying category name
+                ViewBag.Category = await CategoryDO.GetCategoryAsync(recipe.id_category);
 
                 ViewBag.IngredientsDropDown = ingredientsOperations.GetIngredientsDropDown(await IngredientsDO.GetIngredientsAsync());
 
@@ -161,44 +182,20 @@ namespace Semestralka.Controllers
                 ViewBag.IngredientsNames = await ingredientsOperations.GetIngredientsNames(ingredientsList);
 
                 ViewBag.IngredientUnits = await ingredientsOperations.GetUnitNames(ingredientsList);
-            
+
                 //Unit shown next to the textbox for inserting amount
                 ViewBag.Unit = unit.Unit;
 
                 ViewBag.Recipe = recipe;
-
-                return View(model);
             }
-        }
-
-        /**
-         *  Method for inserting new ingredient into database
-        **/
-        [HttpPost]
-        public async Task<ActionResult> Ingredients(Ingredient ingredient)
-        {
-            await Task.Delay(0);
-
-            using (Entities kucharkaEntities = new Entities())
+            catch (Exception ex)
             {
-                kucharkaEntities.Ingredients.Add(ingredient);
-                //initialization variable for error message
-                string message = string.Empty;
-
-                //store information message into variable depending on value returned from database procedure
-                switch (ingredient.id_ingredient)
+                if (ex.StackTrace.Contains("GetRecipeAsync") || id == null)
                 {
-                    case -1:
-                        message = "Ingredience již existuje.\\n";
-                        break;
-                    default:
-                        //save changes in database
-                        kucharkaEntities.SaveChanges();
-                        message = "Ingredience přidána.\\nId: " + ingredient.id_ingredient.ToString();
-                        break;
+                    return RedirectToAction("Index", "Home");
                 }
             }
-            return RedirectToAction("Ingredients", "Recipes");
+            return View(model);
         }
 
         public ActionResult RemoveRecipeIngredient(int recipeID, int ingredientID) 
@@ -216,39 +213,22 @@ namespace Semestralka.Controllers
             return RedirectToAction("Recipe", "Recipes", new { id = recipeID });
         }
 
-        public async Task<ActionResult> Ingredients()
+        /**
+         * Method for deleting recipe depending on id
+        **/
+        public ActionResult Remove(int id)
         {
-            List<IngredientsDO> ingredients = await IngredientsDO.GetIngredientsAsync();
-
-            ViewBag.Ingredients = ingredients;
-
-            return View();
-        }
-
-        public async Task<ActionResult> RemoveIngredient(int id)
-        {
-            try 
+            using (Entities context = new Entities())
             {
-                using (Entities context = new Entities())
-                {
-                    //find ingredient
-                    var ingredient = context.Ingredients.Single(x => x.id_ingredient == id);
-                    //remove ingredient
-                    context.Ingredients.Remove(ingredient);
-                    //save changes in database
-                    context.SaveChanges();
-                }
-            }
-            catch(Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Ingredience nelze smazat. Používá se u některého z receptů");
+                //find recipe
+                var recipe = context.Recipes.Single(x => x.id_recipe == id);
+                //remove recipe
+                context.Recipes.Remove(recipe);
+                //save changes in database
+                context.SaveChanges();
             }
 
-            List<IngredientsDO> ingredients = await IngredientsDO.GetIngredientsAsync();
-
-            ViewBag.Ingredients = ingredients;
-
-            return View("Ingredients");
+            return RedirectToAction("Index", "Recipes");
         }
 	}
 }

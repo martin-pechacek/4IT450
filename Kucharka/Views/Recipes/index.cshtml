@@ -8,7 +8,29 @@
 }
 
 <h2>Recepty</h2>
+@*All recipes in database*@
+<table class="table">
+    <tbody>
+        @foreach (RecipeDO recipe in ViewBag.RecipesList)
+        {
+            <tr>
+                <td>@recipe.RecipeName</td>
+                <td>
+                    <a href="@Url.Action("Recipe", "Recipes", new { id = @recipe.RecipeID })">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Remove", "Recipes", new { id = @recipe.RecipeID })">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
+@*Form for creating new recipe*@
 @using (Html.BeginForm("Index", "Recipes", FormMethod.Post))
 {    
     <div class="form-group">
@@ -21,12 +43,11 @@
             new
             {
                 @class = "form-control input-sm",
-                onchange = "$(this).closest('form').submit();"
             })
         
         @Html.TextAreaFor(m => m.Instructions, 10, 70, null)
      
          @*Add button*@
-        <input type="submit" value="Přidat" />
+        <input type="submit" name="add" value="Přidat" />
     </div>
 }

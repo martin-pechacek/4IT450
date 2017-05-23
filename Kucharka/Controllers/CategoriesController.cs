@@ -75,16 +75,13 @@ namespace Semestralka.Controllers
 
         public async Task<ActionResult> Edit(int? id, string add, CategoryModel model) 
         {
-            if (id == null)
-            {
-                return RedirectToAction("Index", "Categories");
-            }
-            else
+            try
             {
                 Category category = await CategoryDO.GetCategoryAsync((int)id);
 
                 @ViewBag.Category = category;
 
+                //Control if button for saving change was pressed. If not edit page is normally loaded 
                 if (add != null)
                 {
                     using (Entities context = new Entities())
@@ -99,11 +96,16 @@ namespace Semestralka.Controllers
                         return RedirectToAction("Index", "Categories");
                     }
                 }
-                else 
-                {
-                    return View();
-                }                              
             }
+            catch (Exception ex)
+            {
+                if (ex.StackTrace.Contains("GetCategoryAsync") || id == null)
+                {
+                    return RedirectToAction("Index", "Categories");
+                }
+            }
+
+            return View();   
         }
 	}
 }

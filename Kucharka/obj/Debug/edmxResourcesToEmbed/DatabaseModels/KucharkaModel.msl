@@ -42,6 +42,11 @@
           <DeleteFunction FunctionName="KucharkaModel.Store.Delete_Ingredient">
             <ScalarProperty Name="id_ingredient" ParameterName="id_ingredient" />
           </DeleteFunction>
+          <UpdateFunction FunctionName="KucharkaModel.Store.Update_Ingredient">
+            <ScalarProperty Name="unit" ParameterName="unit" Version="Current" />
+            <ScalarProperty Name="name_ingredient" ParameterName="name_ingredient" Version="Current" />
+            <ScalarProperty Name="id_ingredient" ParameterName="id_ingredient" Version="Current" />
+          </UpdateFunction>
         </ModificationFunctionMapping>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -62,6 +67,9 @@
             <ScalarProperty Name="name_recipe" ParameterName="name_recipe" />
             <ResultBinding Name="id_recipe" ColumnName="id_recipe" />
           </InsertFunction>
+          <DeleteFunction FunctionName="KucharkaModel.Store.Delete_Recipe">
+            <ScalarProperty Name="id_recipe" ParameterName="id_recipe" />
+          </DeleteFunction>
         </ModificationFunctionMapping>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -120,5 +128,7 @@
     <FunctionImportMapping FunctionImportName="Insert_User2" FunctionName="KucharkaModel.Store.Insert_User" />
     <FunctionImportMapping FunctionImportName="Delete_Ingredient" FunctionName="KucharkaModel.Store.Delete_Ingredient" />
     <FunctionImportMapping FunctionImportName="Update_Category" FunctionName="KucharkaModel.Store.Update_Category" />
+    <FunctionImportMapping FunctionImportName="Update_Ingredient" FunctionName="KucharkaModel.Store.Update_Ingredient" />
+    <FunctionImportMapping FunctionImportName="Delete_Recipe" FunctionName="KucharkaModel.Store.Delete_Recipe" />
   </EntityContainerMapping>
 </Mapping>

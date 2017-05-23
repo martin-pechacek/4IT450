@@ -20,7 +20,12 @@
                 <td>@ingredient.IngredientName</td>
                 <td>@ingredient.Unit</td>
                 <td>
-                    <a href="@Url.Action("RemoveIngredient", "Recipes", new { id = @ingredient.IngredientID })">
+                    <a href="@Url.Action("Edit", "Ingredients", new { id = @ingredient.IngredientID })">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Remove", "Ingredients", new { id = @ingredient.IngredientID })">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </td>
@@ -31,7 +36,7 @@
 
 
 
-@using (Html.BeginForm("Ingredients", "Recipes", FormMethod.Post))
+@using (Html.BeginForm("Index", "Ingredients", FormMethod.Post))
 {
     <div class="form-group">
         @*Label and textbox for recipe name*@

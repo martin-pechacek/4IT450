@@ -92,5 +92,22 @@ namespace Semestralka.DataObjects
 
             return ingredientDO;
         }
+
+        /**
+         * Return ingredient object depending on ID 
+         **/
+        public static async Task<Ingredient> GetIngredientAsync(short id)
+        {
+            await Task.Delay(0);
+
+            Ingredient ingredient = new Ingredient();
+
+            using (Entities context = new Entities())
+            {
+                ingredient = context.Ingredients.Single(x => x.id_ingredient == id);
+            }
+            
+            return ingredient;
+        }
     }
 }

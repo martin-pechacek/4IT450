@@ -14,7 +14,7 @@ namespace Semestralka.Models
 
         [Required]
         [Display(Name = "Kategorie")]
-        public string Id_category { get; set; }
+        public int Id_category { get; set; }
 
         [Required]
         [Display(Name = "Postup")]

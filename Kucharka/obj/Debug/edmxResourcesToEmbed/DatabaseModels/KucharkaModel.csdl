@@ -83,6 +83,14 @@
       <Parameter Name="id_category" Mode="In" Type="Int32" />
       <Parameter Name="name_category" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="Update_Ingredient">
+      <Parameter Name="id_ingredient" Mode="In" Type="Int32" />
+      <Parameter Name="name_ingredient" Mode="In" Type="String" />
+      <Parameter Name="unit" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Delete_Recipe">
+      <Parameter Name="id_recipe" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="Category">
     <Key>

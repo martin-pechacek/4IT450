@@ -15,14 +15,15 @@
 @using (Html.BeginForm("Recipe", "Recipes", FormMethod.Post))
 {
 
-@Html.HiddenFor(m => m.RecipeModel.Id_recipe);                                            
-
+@Html.HiddenFor(m => m.RecipeModel.Id_recipe);
+@Html.HiddenFor(m => m.RecipeModel.Id_category);    
+    
 <p>Recept</p>
 <table class="table">
     <tbody>
             <tr>
                 <td>@Html.DisplayFor(m => m.RecipeModel.Name_recipe)</td>
-                <td>@Html.DisplayFor(m => m.RecipeModel.Id_category)</td>
+                <td>@ViewBag.Category.name_category</td>
                 <td>@Html.DisplayFor(m => m.RecipeModel.Instructions)</td>
             </tr>
     </tbody>
