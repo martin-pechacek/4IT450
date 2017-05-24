@@ -12,10 +12,12 @@
 @using (Html.BeginForm("Edit", "Ingredients", FormMethod.Post))
 {
     @Html.LabelFor(m => m.Name_ingredient)
-    @Html.TextBoxFor(m => m.Name_ingredient  , new { Value = @ViewBag.Ingredient.name_ingredient })
+    @Html.TextBoxFor(m => m.Name_ingredient, new { Value = @ViewBag.Ingredient.name_ingredient, maxlength = 512 })
+    @Html.ValidationMessage("IngredientName")
     
     @Html.LabelFor(m => m.Unit)
-    @Html.TextBoxFor(m => m.Unit  , new { Value = @ViewBag.Ingredient.unit })
+    @Html.TextBoxFor(m => m.Unit, new { Value = @ViewBag.Ingredient.unit, maxlength = 10 })
+    @Html.ValidationMessage("UnitError")
 
     <input type="submit" name="edit" value="Uložit" />
 }

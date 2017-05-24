@@ -41,11 +41,13 @@
     <div class="form-group">
         @*Label and textbox for recipe name*@
         @Html.LabelFor(m => m.Name_ingredient)
-        @Html.TextBoxFor(m => m.Name_ingredient)
+        @Html.TextBoxFor(m => m.Name_ingredient, new { maxlength=512 })
+        @Html.ValidationMessage("IngredientName")
 
         @*Label and textbox for unit*@
         @Html.LabelFor(m => m.Unit)
-        @Html.TextBoxFor(m => m.Unit)
+        @Html.TextBoxFor(m => m.Unit, new { maxlength = 10 })
+        @Html.ValidationMessage("Unit")
 
         @*Add button*@
         <input type="submit" value="Přidat" />

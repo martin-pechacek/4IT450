@@ -10,7 +10,7 @@
 
 @using(Html.BeginForm("Edit", "Categories", FormMethod.Post))
 {
-    @Html.TextBoxFor(m => m.name_category, new { Value = @ViewBag.Category.name_category })
+    @Html.TextBoxFor(m => m.name_category, new { Value = @ViewBag.Category.name_category, maxlength=128 })
     
     <input type="submit" name="add" value="Uložit"/>
 }

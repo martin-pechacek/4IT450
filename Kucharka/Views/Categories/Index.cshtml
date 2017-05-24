@@ -9,13 +9,16 @@
 
 <h2>Kategorie</h2>
 
+@Html.ValidationSummary(true, "", "p")
+
 @using (Html.BeginForm("Index", "Categories", FormMethod.Post))
 {
     <div class="form-group">
         @*Label and textbox for category name*@
         @Html.LabelFor(m => m.name_category)
-        @Html.TextBoxFor(m => m.name_category)
-        
+        @Html.TextBoxFor(m => m.name_category, new { maxlength=128 })
+        @Html.ValidationMessage("name_category")
+
         @*Add button*@
         <input type="submit" value="Přidat" />
     </div>
@@ -35,7 +38,7 @@
                            </a>
                        </td>
                        <td>
-                           <a href="@Url.Action("Remove", "Categories", new { categoryName = @category.CategoryName })">
+                           <a href="@Url.Action("Remove", "Categories", new { id = @category.CategoryID })">
                                <span class="glyphicon glyphicon-remove" ></span>
                            </a>
                        </td>

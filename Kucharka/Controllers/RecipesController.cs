@@ -17,8 +17,12 @@ namespace Semestralka.Controllers
 
         //
         // GET: /Recipes/
-        public async Task<ActionResult> Index(RecipeModel model)
+        public async Task<ActionResult> Index(RecipeModel model, bool? error)
         {
+            if(error == true)
+            {
+                ModelState.AddModelError(string.Empty, "Recept už existuje");
+            }
             List<RecipeDO> recipes = await RecipeDO.GetRecipesAsync();
             
             List<CategoryDO> categories = await CategoryDO.GetCategoriesAsync();
@@ -40,29 +44,51 @@ namespace Semestralka.Controllers
         *  Method for inserting new recipe into database (without ingredients)
         **/
         [HttpPost]
-        public async Task<ActionResult> Index(Recipe recipe, string add)
+        public async Task<ActionResult> Index(Recipe recipe, string add, RecipeModel model)
         {
             await Task.Delay(0);
 
-            using (Entities kucharkaEntities = new Entities())
-            {
-                //sends data into database
-                kucharkaEntities.Recipes.Add(recipe);
-                //save changes in database
-                kucharkaEntities.SaveChanges();
-                //initialization variable for error message
-                string message = string.Empty;
+            List<RecipeDO> recipes = await RecipeDO.GetRecipesAsync();
 
-                //store information message into variable depending on value returned from database procedure
-                switch (recipe.id_recipe)
+            List<CategoryDO> categories = await CategoryDO.GetCategoriesAsync();
+
+            ViewBag.RecipesList = recipes;
+
+            ViewBag.CategoryList = categories
+                .Select(x => new SelectListItem()
                 {
-                    case -1:
-                        message = "Recept již existuje.\\n";
-                        break;
-                    default:
-                        message = "Recept přidán.\\nId: " + recipe.id_category.ToString();
-                        break;
+                    Text = x.CategoryName,
+                    Value = x.CategoryID.ToString()
+                })
+                .ToList();
+
+            try
+            {
+                using (Entities context = new Entities())
+                {
+                    //sends data into database
+                    context.Recipes.Add(recipe);
+                    //save changes in database
+                    context.SaveChanges();
+
+                    if (recipe.id_recipe == -1) 
+                    {
+                        return RedirectToAction("Index", "Recipes", new { error = true });
+                    }
                 }
+            }
+            catch(Exception ex)
+            { 
+                if(model.Name_recipe == null)
+                {
+                    ModelState.AddModelError("RecipeName", "Název receptu musí být vyplněný");                    
+                }
+                if (model.Instructions == null)
+                {
+                    ModelState.AddModelError("InstructionsArea", "Instrukce musejí být vyplněné");
+                }
+
+                return View();
             }
             return RedirectToAction("Recipe", "Recipes", new { id = recipe.id_recipe });
         }
@@ -146,6 +172,7 @@ namespace Semestralka.Controllers
         **/
         public async Task<ActionResult> Recipe(int? id)
         {
+
             //Initialize model
             RecipeDetailModel model = new RecipeDetailModel();
             try
@@ -229,6 +256,33 @@ namespace Semestralka.Controllers
             }
 
             return RedirectToAction("Index", "Recipes");
+        }
+        /**
+         * Method for editing recipe name and instructions 
+        **/
+        public ActionResult Edit(RecipeDetailModel model)
+        {
+            try
+            {
+                using (Entities context = new Entities())
+                {
+                    //find recipe
+                    var recipe = context.Recipes.Single(x => x.id_recipe == model.RecipeModel.Id_recipe);
+                    //store new value
+                    recipe.name_recipe = model.RecipeModel.Name_recipe;
+                    recipe.instructions = model.RecipeModel.Instructions;
+                    //save changes in db
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Equals("Pro metodu, která není statická, je požadován cíl."))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            return RedirectToAction("Recipe","Recipes", new { id = model.RecipeModel.Id_recipe});
         }
 	}
 }

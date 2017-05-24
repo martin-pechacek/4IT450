@@ -14,13 +14,18 @@ namespace Semestralka.Controllers
     {
         //
         // GET: /Categories/
-        public async Task<ActionResult> Index(CategoryModel model)
+        public async Task<ActionResult> Index(bool? error)
         {
+            if(error == true)
+            {
+                ModelState.AddModelError(string.Empty, "Kategorie se používá u některého z receptů");
+            }
+
             List<CategoryDO> categories = await CategoryDO.GetCategoriesAsync();
 
             ViewBag.Categories = categories;
 
-            return View(model);
+            return View();
         }
 
         /**
@@ -31,43 +36,60 @@ namespace Semestralka.Controllers
         {
             await Task.Delay(0);
 
-            using (Entities kucharkaEntities = new Entities())
+            try
             {
-               //sends data into database
-               kucharkaEntities.Categories.Add(category);
-               //save changes in database
-               kucharkaEntities.SaveChanges();
-               //initialization variable for error message
-               string message = string.Empty;
+                using (Entities kucharkaEntities = new Entities())
+                {
+                    //sends data into database
+                    kucharkaEntities.Categories.Add(category);
+                    //save changes in database
+                    kucharkaEntities.SaveChanges();
+                    //initialization variable for error message
+                    string message = string.Empty;
 
-               //storing information message into variable depending on value returned from databse procedure
-               switch (category.id_category)
-               {
-                    case -1:
-                       message = "Kategorie již existuje.\\nVyberte jiné jméno.";
-                       break;
-                    default:
-                        message = "Kategorie přidána.\\nId: " + category.id_category.ToString();
-                        break;
+                    //storing information message into variable depending on value returned from databse procedure
+                    if (category.id_category == -1)
+                    {
+                        ModelState.AddModelError(string.Empty, "Kategorie už existuje");
+                    }
                 }
+            } 
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("name_category", "Název kategorie musí být vyplněný");
             }
-           
-            return RedirectToAction("Index", "Categories");
+            List<CategoryDO> categories = await CategoryDO.GetCategoriesAsync();
+
+            ViewBag.Categories = categories;
+
+            return View("Index");
+
+            //return RedirectToAction("Index", "Categories");
         }
 
-        public async Task<ActionResult> Remove(string categoryName)
+        public async Task<ActionResult> Remove(int id)
         {
             await Task.Delay(0);
-            
-            using (Entities context =
-                new Entities())
+
+            try
             {
-                //find category
-                var category = context.Categories.Single(x => x.name_category == categoryName);
-                //remove category in db
-                context.Categories.Remove(category);
-                //save change in db
-                context.SaveChanges();
+                using (Entities context =
+                    new Entities())
+                {
+                    //find category
+                    var category = context.Categories.Single(x => x.id_category == id);
+                    //remove category in db
+                    context.Categories.Remove(category);
+                    //save change in db
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                if(ex.Message.Equals("An error occurred while updating the entries. See the inner exception for details."))
+                {
+                    return RedirectToAction("Index", "Categories", new { error = true });
+                }
             }
 
             return RedirectToAction("Index", "Categories");
@@ -104,7 +126,6 @@ namespace Semestralka.Controllers
                     return RedirectToAction("Index", "Categories");
                 }
             }
-
             return View();   
         }
 	}

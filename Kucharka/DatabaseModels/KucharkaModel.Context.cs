@@ -276,5 +276,31 @@ namespace Semestralka.DatabaseModels
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Delete_Recipe", id_recipeParameter);
         }
+    
+        public virtual int Update_Recipe(Nullable<int> id_recipe, string name_recipe, string instructions)
+        {
+            var id_recipeParameter = id_recipe.HasValue ?
+                new ObjectParameter("id_recipe", id_recipe) :
+                new ObjectParameter("id_recipe", typeof(int));
+    
+            var name_recipeParameter = name_recipe != null ?
+                new ObjectParameter("name_recipe", name_recipe) :
+                new ObjectParameter("name_recipe", typeof(string));
+    
+            var instructionsParameter = instructions != null ?
+                new ObjectParameter("instructions", instructions) :
+                new ObjectParameter("instructions", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Update_Recipe", id_recipeParameter, name_recipeParameter, instructionsParameter);
+        }
+    
+        public virtual int Delete_Category(Nullable<int> id_category)
+        {
+            var id_categoryParameter = id_category.HasValue ?
+                new ObjectParameter("id_category", id_category) :
+                new ObjectParameter("id_category", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Delete_Category", id_categoryParameter);
+        }
     }
 }

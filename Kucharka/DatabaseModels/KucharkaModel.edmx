@@ -76,20 +76,8 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_RELATION_RELATIONS_RECIPE">
-          <End Role="Recipe" Type="Self.Recipe" Multiplicity="1" />
-          <End Role="Relationship_2" Type="Self.Relationship_2" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Recipe">
-              <PropertyRef Name="id_recipe" />
-            </Principal>
-            <Dependent Role="Relationship_2">
-              <PropertyRef Name="id_recipe" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Function Name="category_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="name_category" Type="varchar" Mode="In" />
+        <Function Name="Delete_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_category" Type="int" Mode="In" />
         </Function>
         <Function Name="Delete_Ingredient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id_ingredient" Type="int" Mode="In" />
@@ -134,6 +122,11 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
           <Parameter Name="name_ingredient" Type="varchar" Mode="In" />
           <Parameter Name="unit" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="Update_Recipe" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_recipe" Type="int" Mode="In" />
+          <Parameter Name="name_recipe" Type="varchar" Mode="In" />
+          <Parameter Name="instructions" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="KucharkaModelStoreContainer">
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
@@ -152,10 +145,6 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
           </AssociationSet>
           <AssociationSet Name="FK_RELATION_RELATIONS_INGREDIE" Association="Self.FK_RELATION_RELATIONS_INGREDIE">
             <End Role="Ingredient" EntitySet="Ingredient" />
-            <End Role="Relationship_2" EntitySet="Relationship_2" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RELATION_RELATIONS_RECIPE" Association="Self.FK_RELATION_RELATIONS_RECIPE">
-            <End Role="Recipe" EntitySet="Recipe" />
             <End Role="Relationship_2" EntitySet="Relationship_2" />
           </AssociationSet>
         </EntityContainer>
@@ -252,7 +241,15 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
             <Parameter Name="unit" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Delete_Recipe">
+          <Parameter Name="id_recipe" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Update_Recipe">
             <Parameter Name="id_recipe" Mode="In" Type="Int32" />
+            <Parameter Name="name_recipe" Mode="In" Type="String" />
+            <Parameter Name="instructions" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Delete_Category">
+          <Parameter Name="id_category" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Category">
@@ -360,13 +357,13 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
                   <ScalarProperty Name="name_category" ParameterName="name_category" />
                   <ResultBinding Name="id_category" ColumnName="id_category" />
                 </InsertFunction>
-                <DeleteFunction FunctionName="KucharkaModel.Store.category_Delete">
-                  <ScalarProperty Name="name_category" ParameterName="name_category" />
-                </DeleteFunction>
                 <UpdateFunction FunctionName="KucharkaModel.Store.Update_Category">
                   <ScalarProperty Name="name_category" ParameterName="name_category" Version="Current" />
                   <ScalarProperty Name="id_category" ParameterName="id_category" Version="Current" />
                 </UpdateFunction>
+                <DeleteFunction FunctionName="KucharkaModel.Store.Delete_Category">
+                  <ScalarProperty Name="id_category" ParameterName="id_category" />
+                </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -416,11 +413,15 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
                 <DeleteFunction FunctionName="KucharkaModel.Store.Delete_Recipe">
                   <ScalarProperty Name="id_recipe" ParameterName="id_recipe" />
                 </DeleteFunction>
+                <UpdateFunction FunctionName="KucharkaModel.Store.Update_Recipe">
+                  <ScalarProperty Name="instructions" ParameterName="instructions" Version="Current" />
+                  <ScalarProperty Name="name_recipe" ParameterName="name_recipe" Version="Current" />
+                  <ScalarProperty Name="id_recipe" ParameterName="id_recipe" Version="Current" />
+                </UpdateFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="Insert_Category" FunctionName="KucharkaModel.Store.Insert_Category" />
-          <FunctionImportMapping FunctionImportName="category_Delete" FunctionName="KucharkaModel.Store.category_Delete" />
           <FunctionImportMapping FunctionImportName="Insert_Recipe" FunctionName="KucharkaModel.Store.Insert_Recipe" />
           <EntitySetMapping Name="Recipe_Ingredient">
             <EntityTypeMapping TypeName="KucharkaModel.Recipe_Ingredient">
@@ -476,6 +477,8 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
           <FunctionImportMapping FunctionImportName="Update_Category" FunctionName="KucharkaModel.Store.Update_Category" />
           <FunctionImportMapping FunctionImportName="Update_Ingredient" FunctionName="KucharkaModel.Store.Update_Ingredient" />
           <FunctionImportMapping FunctionImportName="Delete_Recipe" FunctionName="KucharkaModel.Store.Delete_Recipe" />
+          <FunctionImportMapping FunctionImportName="Update_Recipe" FunctionName="KucharkaModel.Store.Update_Recipe" />
+          <FunctionImportMapping FunctionImportName="Delete_Category" FunctionName="KucharkaModel.Store.Delete_Category" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
