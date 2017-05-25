@@ -17,6 +17,17 @@ namespace Semestralka.Controllers
         // GET: /User/
         public ActionResult Index()
         {
+             bool userRight = false;
+             using(Entities context = new Entities())
+            {
+                var userRecord = context.Users.Single(x => x.username == User.Identity.Name);
+                userRight = userRecord.user_right;
+            }
+            if(!userRight)
+            {
+                ModelState.AddModelError(string.Empty, "Nemáte oprávnění");
+            }
+
             return View();
         }
 

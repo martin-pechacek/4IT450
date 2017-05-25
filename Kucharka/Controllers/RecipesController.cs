@@ -170,6 +170,7 @@ namespace Semestralka.Controllers
         /**
         *  Shows recipe detail
         **/
+        [AllowAnonymous]
         public async Task<ActionResult> Recipe(int? id)
         {
 

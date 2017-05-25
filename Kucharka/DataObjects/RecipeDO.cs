@@ -47,17 +47,5 @@ namespace Semestralka.DataObjects
                     }).ToListAsync();
             }
         }
-
-        public static bool isSelected(int categoryID, int recipeCategoryID) 
-        {
-            if(categoryID == recipeCategoryID)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }           
-        }
     }
 }

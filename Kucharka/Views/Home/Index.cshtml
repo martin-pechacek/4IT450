@@ -1,8 +1,17 @@
-﻿@{
+﻿@using Semestralka.Models;
+@using Semestralka.DataObjects;
+
+@model RecipeModel
+
+@{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
-@Html.ActionLink("Users", "Index", "Users")
 
-
+@foreach (RecipeDO recipe in ViewBag.recipes)
+{
+    <a href="@Url.Action("Recipe", "Recipes", new { id = @recipe.RecipeID })">
+        @recipe.RecipeName
+    </a>
+}

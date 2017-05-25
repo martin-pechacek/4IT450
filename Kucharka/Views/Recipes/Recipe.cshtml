@@ -13,62 +13,97 @@
 
 @*Recipe*@
 <p>Recept</p>
-@using (Html.BeginForm("Edit", "Recipes", FormMethod.Post))
+
+@if(User.Identity.IsAuthenticated)
 {
+    using (Html.BeginForm("Edit", "Recipes", FormMethod.Post))
+    {
     @Html.HiddenFor(m => m.RecipeModel.Id_recipe);
-<table class="table">
-    <tbody>
-            <tr>
-                <td>@Html.TextBoxFor(m => m.RecipeModel.Name_recipe, new { Value = @Model.RecipeModel.Name_recipe, maxlength = 1024 })</td>
-                <td>@ViewBag.Category.name_category</td>
-                <td>@Html.TextBoxFor(m => m.RecipeModel.Instructions, new { Value = @Model.RecipeModel.Instructions, maxlength = 2048 })</td>
-            </tr>
-    </tbody>
-</table>
+    <table class="table">
+        <tbody>
+                <tr>
+                    <td>@Html.TextBoxFor(m => m.RecipeModel.Name_recipe, new { Value = @Model.RecipeModel.Name_recipe, maxlength = 1024 })</td>
+                    <td>@ViewBag.Category.name_category</td>
+                    <td>@Html.TextBoxFor(m => m.RecipeModel.Instructions, new { Value = @Model.RecipeModel.Instructions, maxlength = 2048 })</td>
+                </tr>
+        </tbody>
+    </table>
     
-<input type="submit" value="Uložit">
+    <input type="submit" value="Uložit">
+    }
+
+    @*Ingredients*@
+    if (Enumerable.Count(ViewBag.Ingredients) != 0)
+    {    
+    <p>Ingredience</p>
+
+    <table class="table">
+        <tbody>
+            @for (var i = 0; i < Enumerable.Count(ViewBag.Ingredients); i++)
+            {
+                <tr>
+                    <td>@ViewBag.Ingredients[i].Amount</td>
+                    <td>@ViewBag.IngredientUnits[i]</td>
+                    <td>@ViewBag.IngredientsNames[i]</td>
+                    <td>
+                        <a href="@Url.Action("RemoveRecipeIngredient", "Recipes", new { ingredientID = ViewBag.Ingredients[i].IngredientID, recipeID = @Model.RecipeModel.Id_recipe })">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    using (Html.BeginForm("Recipe", "Recipes", FormMethod.Post))
+    {
+    
+    @Html.HiddenFor(m => m.RecipeModel.Id_recipe);
+    @Html.HiddenFor(m => m.RecipeModel.Id_category);    
+
+        @*Dropdown for ingredients *@
+        @Html.DropDownListFor(m => m.IngredientModel.Id_ingredient, (List<SelectListItem>)ViewBag.IngredientsDropDown,
+            new
+            {
+                @class = "form-control input-sm",
+                onchange = "$(this).closest('form').submit();",
+            })
+    
+        @Html.TextBoxFor(m => m.RecipeIngredient.Amount, new { @type = "number" })
+        @ViewBag.Unit
+    
+       <input type="submit" value="Přidat" name="Add"/>
+    }
 }
-
-@*Ingredients*@
-@if (Enumerable.Count(ViewBag.Ingredients) != 0)
-{    
-<p>Ingredience</p>
-
-<table class="table">
-    <tbody>
-        @for (var i = 0; i < Enumerable.Count(ViewBag.Ingredients); i++)
-        {
-            <tr>
-                <td>@ViewBag.Ingredients[i].Amount</td>
-                <td>@ViewBag.IngredientUnits[i]</td>
-                <td>@ViewBag.IngredientsNames[i]</td>
-                <td>
-                    <a href="@Url.Action("RemoveRecipeIngredient", "Recipes", new { ingredientID = ViewBag.Ingredients[i].IngredientID, recipeID = @Model.RecipeModel.Id_recipe })">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-}
-
-@using (Html.BeginForm("Recipe", "Recipes", FormMethod.Post))
+else 
 {
+    <table class="table">
+        <tbody>
+                <tr>
+                    <td>@Model.RecipeModel.Name_recipe</td>
+                    <td>@ViewBag.Category.name_category</td>
+                    <td>@Model.RecipeModel.Instructions</td>
+                </tr>
+        </tbody>
+    </table>   
     
-@Html.HiddenFor(m => m.RecipeModel.Id_recipe);
-@Html.HiddenFor(m => m.RecipeModel.Id_category);    
+    @*Ingredients*@
+    if (Enumerable.Count(ViewBag.Ingredients) != 0)
+    {    
+    <p>Ingredience</p>
 
-    @*Dropdown for ingredients *@
-    @Html.DropDownListFor(m => m.IngredientModel.Id_ingredient, (List<SelectListItem>)ViewBag.IngredientsDropDown,
-        new
-        {
-            @class = "form-control input-sm",
-            onchange = "$(this).closest('form').submit();",
-        })
-    
-    @Html.TextBoxFor(m => m.RecipeIngredient.Amount, new { @type = "number" })
-    @ViewBag.Unit
-    
-   <input type="submit" value="Přidat" name="Add"/>
+    <table class="table">
+        <tbody>
+            @for (var i = 0; i < Enumerable.Count(ViewBag.Ingredients); i++)
+            {
+                <tr>
+                    <td>@ViewBag.Ingredients[i].Amount</td>
+                    <td>@ViewBag.IngredientUnits[i]</td>
+                    <td>@ViewBag.IngredientsNames[i]</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
 }

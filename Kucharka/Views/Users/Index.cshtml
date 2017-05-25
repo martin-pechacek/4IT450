@@ -8,11 +8,16 @@
 
 <h2>Users</h2>
 
-@*Form for adding new user*@
-@using (Html.BeginForm("Index", "Users", FormMethod.Post))
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    @Html.ValidationSummary(true, "", "p")
+}
+else 
+{
+    @*Form for adding new user*@
+using (Html.BeginForm("Index", "Users", FormMethod.Post))
 {    
-   
-    <div class="form-group">
+     <div class="form-group">
         @*Label and textbox for username*@
         @Html.Label("Username")
         @Html.TextBoxFor(m => m.username)
@@ -40,4 +45,5 @@
         @*Submit button*@
         <input type="submit" value="Send" />
     </div>
+}
 }
