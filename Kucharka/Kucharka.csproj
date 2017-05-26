@@ -117,14 +117,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animate.css" />
+    <Content Include="Content\bootstrap-progressbar-3.3.4.css" />
     <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\site.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\slick.css" />
+    <Content Include="Content\style.css" />
+    <Content Include="Content\theme-color\bridge-theme.css" />
+    <Content Include="Content\theme-color\dark-red-theme.css" />
+    <Content Include="Content\theme-color\default-theme.css" />
+    <Content Include="Content\theme-color\fountain-blue-theme.css" />
+    <Content Include="Content\theme-color\green-theme.css" />
+    <Content Include="Content\theme-color\lite-blue-theme.css" />
+    <Content Include="Content\theme-color\orange-theme.css" />
+    <Content Include="Content\theme-color\pink-theme.css" />
+    <Content Include="Content\theme-color\purple-theme.css" />
+    <Content Include="Content\theme-color\red-theme.css" />
+    <Content Include="Fonts\fontawesome-webfont.svg" />
     <Content Include="Fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="ClassDiagram1.cd" />
     <Content Include="Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Fonts\fontawesome-webfont.eot" />
+    <Content Include="Fonts\fontawesome-webfont.ttf" />
+    <Content Include="Fonts\fontawesome-webfont.woff" />
+    <Content Include="Fonts\fontawesome-webfont.woff2" />
+    <Content Include="Fonts\FontAwesome.otf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

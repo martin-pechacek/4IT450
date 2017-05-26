@@ -3,47 +3,55 @@
 @model AddUserModel
 
 @{
-    ViewBag.Title = "Users";
+    ViewBag.Title = "Správa uživatelů";
 }
 
 <h2>Users</h2>
 
 @if (!Html.ViewData.ModelState.IsValid)
 {
-    @Html.ValidationSummary(true, "", "p")
+    @Html.ValidationSummary(true, "", new { @class="error-message" })
 }
 else 
 {
-    @*Form for adding new user*@
-using (Html.BeginForm("Index", "Users", FormMethod.Post))
-{    
-     <div class="form-group">
-        @*Label and textbox for username*@
-        @Html.Label("Username")
-        @Html.TextBoxFor(m => m.username)
-        @Html.ValidationMessage("Username")
+    <div id="login-content" class="model-content">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                <i class="fa fa-user"></i>
+                Přidat uživatele
+            </h4>
+        </div>
+        <div class="modal-body">
+            @using (Html.BeginForm("Index", "Users", FormMethod.Post))
+            {    
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.username, new { placeholder = "Uživatelské jméno", @class = "form-control" })
+                    @Html.ValidationMessage("Username", new { @class="error-message" })
+                </div>
+                
+                <div class="form-group">
+                    @Html.PasswordFor(m => m.password, new { placeholder = "Heslo", @class = "form-control" })
+                    @Html.ValidationMessage("Password", new { @class="error-message" })
+                </div>
+                
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.firstname, new { placeholder = "Jméno", @class = "form-control" })
+                    @Html.ValidationMessage("Firstname", new { @class="error-message" })
+                </div>
 
-        @*Label and textbox for password*@
-        @Html.Label("Password")
-        @Html.PasswordFor(m => m.password)
-        @Html.ValidationMessage("Password")
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.lastname, new { placeholder = "Příjmení", @class = "form-control" })
+                    @Html.ValidationMessage("Lastname", new { @class="error-message" })
+                </div>
+               
+                    @*Label and textbox for user_right*@
+                    @Html.Label("Možnost správy uživatelů")
+                    @Html.CheckBoxFor(m => m.user_right, new { @style="float: right" })
 
-        @*Label and textbox for firstname*@
-        @Html.Label("Firstname")
-        @Html.TextBoxFor(m => m.firstname)
-        @Html.ValidationMessage("Firstname")
-
-        @*Label and textbox for lastname*@
-        @Html.Label("Lastname")
-        @Html.TextBoxFor(m => m.lastname)
-        @Html.ValidationMessage("Lastname")
-
-        @*Label and textbox for user_right*@
-        @Html.Label("Edit users")
-        @Html.CheckBoxFor(m => m.user_right)
-
-        @*Submit button*@
-        <input type="submit" value="Send" />
+                <div class="form-group">
+                    <input type="submit" class="btn signin-btn" value="Přidat" />
+                </div>
+            }
+        </div>
     </div>
-}
 }

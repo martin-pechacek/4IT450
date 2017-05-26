@@ -6,12 +6,31 @@
 @{
     ViewBag.Title = "Index";
 }
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="our-team-content">
+                <div class="row">
+                    @foreach (RecipeDO recipe in ViewBag.recipes)
+                    {
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <a href="@Url.Action("Recipe", "Recipes", new { id = @recipe.RecipeID })">
 
-<h2>Index</h2>
-
-@foreach (RecipeDO recipe in ViewBag.recipes)
-{
-    <a href="@Url.Action("Recipe", "Recipes", new { id = @recipe.RecipeID })">
-        @recipe.RecipeName
-    </a>
-}
+                                <div class="single-team-member">
+                                    <div class="team-member-img">
+                                        <img src="http://placehold.it/240x260" alt="recipe image">
+                                    </div>
+                                    <div class="team-member-name">
+                                        <p>
+                                            @recipe.RecipeName
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
