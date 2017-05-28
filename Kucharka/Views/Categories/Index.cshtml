@@ -6,45 +6,57 @@
 @{
     ViewBag.Title = "Kategorie";
 }
-
-<h2>Kategorie</h2>
-
-@Html.ValidationSummary(true, "", "p")
-
-@using (Html.BeginForm("Index", "Categories", FormMethod.Post))
-{
-    <div class="form-group">
-        @*Label and textbox for category name*@
-        @Html.LabelFor(m => m.name_category)
-        @Html.TextBoxFor(m => m.name_category, new { maxlength=128 })
-        @Html.ValidationMessage("name_category")
-
-        @*Add button*@
-        <input type="submit" value="Přidat" />
+<div id="recipe-content">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <i class="fa fa-file-text"></i>
+            Kategorie
+        </h4>
     </div>
-    
-    if (ViewBag.Categories != null) 
-    {
-    @*List of categories*@
-    <table class="table">
-           <tbody>
-               @foreach (CategoryDO category in ViewBag.categories)
-               {
-                   <tr>
-                       <td>@category.CategoryName</td>
-                       <td>
-                           <a href="@Url.Action("Edit", "Categories", new { id = @category.CategoryID })">
-                               <span class="glyphicon glyphicon-edit"></span>
-                           </a>
-                       </td>
-                       <td>
-                           <a href="@Url.Action("Remove", "Categories", new { id = @category.CategoryID })">
-                               <span class="glyphicon glyphicon-remove" ></span>
-                           </a>
-                       </td>
-                   </tr>
-               }
-           </tbody>
-       </table>
-    }
-}
+    <div class="modal-body">
+        @*All categories in database*@
+        <table class="table">
+            <tbody>
+                @foreach (CategoryDO category in ViewBag.categories)
+                {
+                    <tr>
+                        <td style="padding-right:50%">
+                            @category.CategoryName
+                        </td>
+
+                        <td>
+                            <a href="@Url.Action("Edit", "Categories", new { id = @category.CategoryID })">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Remove", "Categories", new { id = @category.CategoryID })">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+        <h4 class="modal-title">
+            <i class="fa fa-plus-circle"></i>
+            Přidat Kategorii
+        </h4>
+
+        @Html.ValidationSummary(true, "", "p")
+
+        @using (Html.BeginForm("Index", "Categories", FormMethod.Post))
+        {
+            <div class="form-group">
+                @*Label and textbox for category name*@
+                @Html.TextBoxFor(m => m.name_category, new { maxlength = 128, placeholder = "Název kategorie", @class = "form-control" })
+                @Html.ValidationMessage("name_category")
+            </div>
+            
+            @*Submit form button*@
+            <input type="submit" class="btn signin-btn" value="Přidat" />
+        }
+    </div>
+</div>

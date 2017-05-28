@@ -4,20 +4,30 @@
 @model IngredientModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = ViewBag.Ingredient.name_ingredient;
 }
 
-<h2>Edit</h2>
+<div id="recipe-content">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <i class="fa fa-pencil-square-o"></i>
+            Upravit Ingredienci
+        </h4>
+    </div>
+    <div class="modal-body">
+        @using (Html.BeginForm("Edit", "Ingredients", FormMethod.Post))
+        {
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.Name_ingredient, new { Value = @ViewBag.Ingredient.name_ingredient, maxlength = 512, @class = "form-control" })
+                @Html.ValidationMessage("IngredientName")
+            </div>
 
-@using (Html.BeginForm("Edit", "Ingredients", FormMethod.Post))
-{
-    @Html.LabelFor(m => m.Name_ingredient)
-    @Html.TextBoxFor(m => m.Name_ingredient, new { Value = @ViewBag.Ingredient.name_ingredient, maxlength = 512 })
-    @Html.ValidationMessage("IngredientName")
-    
-    @Html.LabelFor(m => m.Unit)
-    @Html.TextBoxFor(m => m.Unit, new { Value = @ViewBag.Ingredient.unit, maxlength = 10 })
-    @Html.ValidationMessage("UnitError")
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.Unit, new { Value = @ViewBag.Ingredient.unit, maxlength = 10, @class = "form-control" })
+                @Html.ValidationMessage("UnitError")
+            </div>
 
-    <input type="submit" name="edit" value="Uložit" />
-}
+            <input type="submit" class="btn signin-btn" name="edit" value="Uložit" />
+        }
+    </div>
+</div>

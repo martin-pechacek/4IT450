@@ -4,52 +4,64 @@
 @model IngredientModel
 
 @{
-    ViewBag.Title = "Ingredients";
+    ViewBag.Title = "Ingredience";
 }
 
-<h2>Ingredients</h2>
-
-@Html.ValidationSummary(true, "", "p")
-
-@*List of categories*@
-<table class="table">
-    <tbody>
-        @foreach (IngredientsDO ingredient in ViewBag.ingredients)
-        {
-            <tr>
-                <td>@ingredient.IngredientName</td>
-                <td>@ingredient.Unit</td>
-                <td>
-                    <a href="@Url.Action("Edit", "Ingredients", new { id = @ingredient.IngredientID })">
-                        <span class="glyphicon glyphicon-edit"></span>
-                    </a>
-                </td>
-                <td>
-                    <a href="@Url.Action("Remove", "Ingredients", new { id = @ingredient.IngredientID })">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-
-
-@using (Html.BeginForm("Index", "Ingredients", FormMethod.Post))
-{
-    <div class="form-group">
-        @*Label and textbox for recipe name*@
-        @Html.LabelFor(m => m.Name_ingredient)
-        @Html.TextBoxFor(m => m.Name_ingredient, new { maxlength=512 })
-        @Html.ValidationMessage("IngredientName")
-
-        @*Label and textbox for unit*@
-        @Html.LabelFor(m => m.Unit)
-        @Html.TextBoxFor(m => m.Unit, new { maxlength = 10 })
-        @Html.ValidationMessage("Unit")
-
-        @*Add button*@
-        <input type="submit" value="Přidat" />
+<div id="recipe-content">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <i class="fa fa-file-text"></i>
+            Ingredience
+        </h4>
     </div>
-}
+    <div class="modal-body">
+        @*All ingredients in database*@
+        <table class="table">
+            <tbody>
+                @foreach (IngredientsDO ingredient in ViewBag.ingredients)
+                {
+                    <tr>
+                        <td style="padding-right:50%">
+                            @ingredient.IngredientName (@ingredient.Unit)
+                        </td>
+
+                        <td>
+                            <a href="@Url.Action("Edit", "Ingredients", new { id = @ingredient.IngredientID })">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Remove", "Ingredients", new { id = @ingredient.IngredientID })">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h4 class="modal-title">
+            <i class="fa fa-plus-circle"></i>
+            Přidat Ingredienci
+        </h4>
+
+        @Html.ValidationSummary(true, "", "p")
+
+        @using (Html.BeginForm("Index", "Ingredients", FormMethod.Post))
+        {
+            <div class="form-group">
+                @*Label and textbox for recipe name*@
+                @Html.TextBoxFor(m => m.Name_ingredient, new { maxlength = 512, placeholder = "Název ingredience", @class = "form-control" })
+                @Html.ValidationMessage("IngredientName")
+            </div>
+            <div class="form-group">
+                @*Label and textbox for unit*@
+                @Html.TextBoxFor(m => m.Unit, new { maxlength = 10, placeholder = "Jednotka", @class = "form-control" })
+                @Html.ValidationMessage("Unit")
+            </div>
+
+            @*Add button*@
+            <input type="submit" class="btn signin-btn" value="Přidat" />
+        }
+    </div>
+ </div>

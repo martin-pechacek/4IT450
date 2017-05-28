@@ -5,7 +5,7 @@
 @model RecipeDetailModel
 
 @{
-    ViewBag.Title = "";
+    ViewBag.Title = Model.RecipeModel.Name_recipe;
 }
 
 
@@ -76,37 +76,35 @@
           }
         </div>
     </div>
-    }
-       
-        
-        else
-        {
-        <table class="table">
-            <tbody>
-                <tr>
-                    <td>@Model.RecipeModel.Name_recipe</td>
-                    <td>@ViewBag.Category.name_category</td>
-                    <td>@Model.RecipeModel.Instructions</td>
-                </tr>
-            </tbody>
-        </table>
-
+    } 
+    else
+    {
+        <div id="recipe-name">
+            @Model.RecipeModel.Name_recipe
+        </div>
+    
+        <div id="recipe-detail-category">
+            @ViewBag.Category.name_category
+        </div>
+    
+    
         @*Ingredients*@
         if (Enumerable.Count(ViewBag.Ingredients) != 0)
         {
-        <p>Ingredience</p>
 
         <table class="table">
             <tbody>
                 @for (var i = 0; i < Enumerable.Count(ViewBag.Ingredients); i++)
             {
                     <tr>
-                        <td>@ViewBag.Ingredients[i].Amount</td>
-                        <td>@ViewBag.IngredientUnits[i]</td>
-                        <td>@ViewBag.IngredientsNames[i]</td>
+                        <td style="padding-top: 0px; padding-bottom: 2px;">@ViewBag.Ingredients[i].Amount @ViewBag.IngredientUnits[i] @ViewBag.IngredientsNames[i]</td>
                     </tr>
             }
             </tbody>
         </table>
-        }
-        }
+    
+        <pre>
+            @Model.RecipeModel.Instructions
+        </pre>
+    }
+}

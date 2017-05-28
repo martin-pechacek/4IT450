@@ -308,7 +308,8 @@ img{
 }
 
 #recipe-name {
-    width: 75%
+    width: 75%;
+    font-size: 30px;
 }
 
 #recipe-detail-category {
@@ -335,6 +336,7 @@ img{
 
 #recipe-content .modal-title {  
   font-size: 20px;
+  padding-bottom: 10px;
 }
 
 #recipe-content .modal-title i{

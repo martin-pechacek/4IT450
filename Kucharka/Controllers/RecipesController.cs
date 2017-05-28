@@ -151,7 +151,7 @@ namespace Semestralka.Controllers
                     }
                     catch(Exception ex)
                     {
-                        //this code block is in catch clause to prevent multiple adding same ingredient. (Single() returns null => ingredient is was not added before)  
+                        //this code block is in catch clause to prevent multiple adding same ingredient. (Single() returns null => ingredient was not added before)  
 
                         //send data into database
                         context.Recipe_Ingredient.Add(recipeIngredient);

@@ -34,7 +34,7 @@
                     <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="dropdown">
+                            <li>
                                 <a href="#" data-toggle="dropdown" class="dropdown-toggle">Recepty<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>
@@ -48,25 +48,20 @@
                                     </li>
                                 </ul>
                             </li>
-                        }
-
-                        <li>
-                            @if (User.Identity.IsAuthenticated)
-                            {
+                            
+                            <li>
                                 @Html.ActionLink("Uživatelé", "Index", "Users")
-                            }
-                        </li>
-                        <li>
-                            @*If user is logged in show link for log off. If not show login link*@
-                            @if (User.Identity.IsAuthenticated)
-                            {
+                            </li>
+                            <li>
                                 @Html.ActionLink("Odhlásit se", "LogOff", "Users", null, new { @class = "navbar-link" })
-                            }
-                            else
-                            {
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
                                 @Html.ActionLink("Login", "Login", "Users", null, new { @class = "navbar-link" })
-                            }
-                        </li>
+                            </li>                           
+                        }
                     </ul>
                 </div>
             </div>
@@ -76,7 +71,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - 4IT450 Semestrální práce</p>
         </footer>
     </div>
 
