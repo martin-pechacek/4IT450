@@ -3,6 +3,8 @@
 
 @model RecipeModel
 
+
+
 @{
     ViewBag.Title = "Recepty";
 }
@@ -49,12 +51,12 @@
 @Html.ValidationSummary(true, "", new { @class = "error-message" })
 
 @*Form for creating new recipe*@
-@using (Html.BeginForm("Index", "Recipes", FormMethod.Post))
+@using (Html.BeginForm("Index", "Recipes", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="form-group">
         @*Label and textbox for recipe name*@
         @Html.TextBoxFor(m => m.Name_recipe, new { maxlength = 1024, placeholder = "Název receptu", @class = "form-control" })
-        @Html.ValidationMessage("RecipeName", new { @class="error-message"})   
+        @Html.ValidationMessage("RecipeName", new { @class = "error-message" })   
     </div>
     
     <div class="form-group">
@@ -71,11 +73,10 @@
         @Html.ValidationMessage("InstructionsArea", new { @class = "error-message" })
     </div>
     
+    <input type="file" name="file" />
+    
     <input type="submit" class="btn signin-btn" name="add" value="Přidat" />
 }
-
-
-
 
     </div>
 </div>

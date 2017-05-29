@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Cloudinary</id>
+    <version>0.0.5</version>
+    <title>Cloudinary</title>
+    <authors>Thomas Van Machelen</authors>
+    <owners>Thomas Van Machelen</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>https://github.com/thomasvm/cloudinary-dotnet</projectUrl>
+    <iconUrl>https://raw.github.com/thomasvm/cloudinary-dotnet/master/build/cloudinary_logo.jpg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A community-created library for easy integration with Cloudinary. 
+        Note that there also is an official Cloudinary package called CloudinaryDotNet</description>
+    <summary />
+    <releaseNotes>No new features, simply pointing out that there now is an official Cloudinary package: CloudinaryDotNet</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <tags>Cloudinary MVC Images</tags>
+  </metadata>
+</package>
