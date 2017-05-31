@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Semestralka.DatabaseModels;
+using Semestralka.DataObjects;
 using Semestralka.Models;
 using Semestralka.Other;
 using System;
@@ -15,18 +16,18 @@ namespace Semestralka.Controllers
     {
         //
         // GET: /User/
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-             bool userRight = false;
-             using(Entities context = new Entities())
-            {
-                var userRecord = context.Users.Single(x => x.username == User.Identity.Name);
-                userRight = userRecord.user_right;
-            }
-            if(!userRight)
-            {
+             List<UserDO> users = await UserDO.GetUsersAsync();
+
+             User user = UserDO.GetUserAsync(User.Identity.Name);
+
+             if(!user.user_right)
+             {
                 ModelState.AddModelError(string.Empty, "Nemáte oprávnění");
-            }
+             }
+
+             ViewBag.Users = users;
 
             return View();
         }
@@ -35,7 +36,7 @@ namespace Semestralka.Controllers
          *  Method for inserting user account into database
         **/
         [HttpPost]
-        public ActionResult Index(User user)
+        public async Task<ActionResult> Index(User user)
         {
             try
             {
@@ -82,6 +83,10 @@ namespace Semestralka.Controllers
                     ModelState.AddModelError("Lastname", "Příjmení musí být vyplněné");
                 }
             }
+            List<UserDO> users = await UserDO.GetUsersAsync();
+
+            ViewBag.Users = users;
+
             return View();
         }
 
@@ -130,6 +135,24 @@ namespace Semestralka.Controllers
         {
             HttpContext.GetOwinContext().Authentication.SignOut();
             return RedirectToAction("Index", "Home");
+        }
+
+        /**
+         * Method for deleting user depending on id
+        **/
+        public ActionResult Remove(int id)
+        {
+            using (Entities context = new Entities())
+            {
+                //find recipe
+                var user = context.Users.Single(x => x.id_user == id);
+                //remove recipe
+                context.Users.Remove(user);
+                //save changes in database
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "Users");
         }
 	}
 }

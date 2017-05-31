@@ -65,6 +65,19 @@ namespace Semestralka.Controllers
                 })
                 .ToList();
 
+            var file = Request.Files[0];
+
+            if (!(file.FileName.Contains(".jpg") || file.FileName.Contains(".gif") || file.FileName.Contains(".jpeg") || file.FileName.Contains(".png")))
+            {
+                if (file.ContentLength != 0)
+                {
+                    ModelState.AddModelError("Image", "Špatný formát souboru");
+
+                    return View(model);
+                }
+            }
+
+
             try
             {
                 using (Entities context = new Entities())
@@ -74,24 +87,17 @@ namespace Semestralka.Controllers
                     //save changes in database
                     context.SaveChanges();
 
-                    if (recipe.id_recipe == -1) 
+                    if (recipe.id_recipe == -1)
                     {
                         return RedirectToAction("Index", "Recipes", new { error = true });
                     }
                 }
-
-                CloudinaryOperations upload = new CloudinaryOperations();
-
-                var file = Request.Files[0];
-
-                upload.Upload(file, recipe.id_recipe);
-
             }
-            catch(Exception ex)
-            { 
-                if(model.Name_recipe == null)
+            catch (Exception ex)
+            {
+                if (model.Name_recipe == null)
                 {
-                    ModelState.AddModelError("RecipeName", "Název receptu musí být vyplněný");                    
+                    ModelState.AddModelError("RecipeName", "Název receptu musí být vyplněný");
                 }
                 if (model.Instructions == null)
                 {
@@ -100,6 +106,12 @@ namespace Semestralka.Controllers
 
                 return View();
             }
+
+
+            CloudinaryOperations cloudinary = new CloudinaryOperations();
+
+            cloudinary.Upload(file, recipe.id_recipe);
+
             return RedirectToAction("Recipe", "Recipes", new { id = recipe.id_recipe });
         }
 
@@ -256,18 +268,27 @@ namespace Semestralka.Controllers
         **/
         public ActionResult Remove(int id)
         {
-            using (Entities context = new Entities())
+            try
             {
-                //find recipe
-                var recipe = context.Recipes.Single(x => x.id_recipe == id);
-                //remove recipe
-                context.Recipes.Remove(recipe);
-                //save changes in database
-                context.SaveChanges();
+                using (Entities context = new Entities())
+                {
+                    //find recipe
+                    var recipe = context.Recipes.Single(x => x.id_recipe == id);
+                    //remove recipe
+                    context.Recipes.Remove(recipe);
+                    //save changes in database
+                    context.SaveChanges();
+                }
             }
+            catch (Exception ex)
+            {
+            
+            }
+
 
             return RedirectToAction("Index", "Recipes");
         }
+
         /**
          * Method for editing recipe name and instructions 
         **/

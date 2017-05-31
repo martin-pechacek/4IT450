@@ -106,10 +106,12 @@
                     }
                 </tbody>
             </table>
-
-            <pre>
-            @Model.RecipeModel.Instructions
-        </pre>
+            
+            <h3 class="modal-title">
+                Postup
+            </h3>
+        
+            @Html.TextAreaFor(m => m.RecipeModel.Instructions, new { Value = @Model.RecipeModel.Instructions, maxlength = 2048, @style = "width: 75%; min-height: 250px; border: 0; background-color: #fff", disabled = "disabled" })
         }
     }
 

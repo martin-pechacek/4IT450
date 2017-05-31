@@ -33,6 +33,7 @@ namespace Semestralka.DataObjects
 
             return recipe;
         }
+
         /**
          *  Return list of all recipes in database
         **/

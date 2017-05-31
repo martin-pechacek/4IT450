@@ -6,21 +6,21 @@ using System.Web;
 
 namespace Semestralka.Models
 {
-    public class AddUserModel
+    public class UserModel
     {       
         [Required]
-        public string username { get; set; }
+        public string Username { get; set; }
 
         [Required]
-        public string password { get; set; }
+        public string Password { get; set; }
 
         [Required]
-        public string firstname { get; set; }
+        public string Firstname { get; set; }
 
         [Required]
-        public string lastname { get; set; }
+        public string Lastname { get; set; }
 
         [Required]
-        public bool user_right { get; set; }
+        public bool User_right { get; set; }
     }
 }

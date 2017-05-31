@@ -320,6 +320,16 @@ Author URI : http://www.markups.io/
   color: #ff871c;
 }
 
+#recipe-content .modal-title {
+  color: #ff871c;
+}
+
+#recipe-detail-ingredient-dropdown {
+    width: 75%;
+    display: inline-flex;
+}
+
+
 .service-icon {
   color: #ff871c;
 }

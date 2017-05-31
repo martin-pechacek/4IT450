@@ -83,6 +83,9 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
     <Parameter Name="id_ingredient" Type="int" Mode="In" />
     <Parameter Name="id_recipe" Type="int" Mode="In" />
   </Function>
+  <Function Name="Delete_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id_user" Type="int" Mode="In" />
+  </Function>
   <Function Name="Insert_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="name_category" Type="varchar" Mode="In" />
   </Function>
@@ -120,6 +123,10 @@ warning 6002: The table/view 'xpecm36.dbo.Relationship_2' does not have a primar
     <Parameter Name="id_recipe" Type="int" Mode="In" />
     <Parameter Name="name_recipe" Type="varchar" Mode="In" />
     <Parameter Name="instructions" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="Update_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id_user" Type="int" Mode="In" />
+    <Parameter Name="user_right" Type="bit" Mode="In" />
   </Function>
   <EntityContainer Name="KucharkaModelStoreContainer">
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />

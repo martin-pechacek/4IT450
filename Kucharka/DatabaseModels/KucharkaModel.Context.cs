@@ -302,5 +302,27 @@ namespace Semestralka.DatabaseModels
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Delete_Category", id_categoryParameter);
         }
+    
+        public virtual int Delete_User(Nullable<int> id_user)
+        {
+            var id_userParameter = id_user.HasValue ?
+                new ObjectParameter("id_user", id_user) :
+                new ObjectParameter("id_user", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Delete_User", id_userParameter);
+        }
+    
+        public virtual int Update_User(Nullable<int> id_user, Nullable<bool> user_right)
+        {
+            var id_userParameter = id_user.HasValue ?
+                new ObjectParameter("id_user", id_user) :
+                new ObjectParameter("id_user", typeof(int));
+    
+            var user_rightParameter = user_right.HasValue ?
+                new ObjectParameter("user_right", user_right) :
+                new ObjectParameter("user_right", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Update_User", id_userParameter, user_rightParameter);
+        }
     }
 }

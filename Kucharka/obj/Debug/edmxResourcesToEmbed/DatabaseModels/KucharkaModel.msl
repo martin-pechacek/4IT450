@@ -126,6 +126,13 @@
             <ScalarProperty Name="username" ParameterName="username" />
             <ResultBinding Name="id_user" ColumnName="id_user" />
           </InsertFunction>
+          <UpdateFunction FunctionName="KucharkaModel.Store.Update_User">
+            <ScalarProperty Name="user_right" ParameterName="user_right" Version="Current" />
+            <ScalarProperty Name="id_user" ParameterName="id_user" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="KucharkaModel.Store.Delete_User">
+            <ScalarProperty Name="id_user" ParameterName="id_user" />
+          </DeleteFunction>
         </ModificationFunctionMapping>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -136,5 +143,7 @@
     <FunctionImportMapping FunctionImportName="Delete_Recipe" FunctionName="KucharkaModel.Store.Delete_Recipe" />
     <FunctionImportMapping FunctionImportName="Update_Recipe" FunctionName="KucharkaModel.Store.Update_Recipe" />
     <FunctionImportMapping FunctionImportName="Delete_Category" FunctionName="KucharkaModel.Store.Delete_Category" />
+    <FunctionImportMapping FunctionImportName="Delete_User" FunctionName="KucharkaModel.Store.Delete_User" />
+    <FunctionImportMapping FunctionImportName="Update_User" FunctionName="KucharkaModel.Store.Update_User" />
   </EntityContainerMapping>
 </Mapping>

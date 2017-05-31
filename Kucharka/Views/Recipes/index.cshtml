@@ -3,8 +3,6 @@
 
 @model RecipeModel
 
-
-
 @{
     ViewBag.Title = "Recepty";
 }
@@ -73,11 +71,30 @@
         @Html.ValidationMessage("InstructionsArea", new { @class = "error-message" })
     </div>
     
-    <input type="file" name="file" />
-    
-    <input type="submit" class="btn signin-btn" name="add" value="Přidat" />
+    <div class="form-group">
+
+
+        @Html.Label("Obrázek (jpg, gif, png)")
+        <p></p>
+        <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+        <div class="fileUpload btn btn-primary">
+            <span>Upload</span>
+            <input id="uploadBtn" type="file" name="file" class="upload" />
+        </div>
+        <p>
+            @Html.ValidationMessage("Image", new { @class = "error-message" })
+        </p>      
+    </div>
+
+    <input type="submit" class="btn signin-btn" id="upload-button" name="add" value="Přidat" />
 }
 
     </div>
 </div>
+
+<script>
+    document.getElementById("uploadBtn").onchange = function () {
+        document.getElementById("uploadFile").value = this.value;
+    };
+</script>
 

@@ -45,7 +45,7 @@
             Přidat Ingredienci
         </h4>
 
-        @Html.ValidationSummary(true, "", "p")
+        @Html.ValidationSummary(true, "", new { @class="error-message" })
 
         @using (Html.BeginForm("Index", "Ingredients", FormMethod.Post))
         {

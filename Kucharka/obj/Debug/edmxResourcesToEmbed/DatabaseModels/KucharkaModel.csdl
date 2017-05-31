@@ -99,6 +99,13 @@
     <FunctionImport Name="Delete_Category">
       <Parameter Name="id_category" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="Delete_User">
+      <Parameter Name="id_user" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Update_User">
+      <Parameter Name="id_user" Mode="In" Type="Int32" />
+      <Parameter Name="user_right" Mode="In" Type="Boolean" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="Category">
     <Key>

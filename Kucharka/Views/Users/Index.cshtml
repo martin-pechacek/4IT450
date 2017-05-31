@@ -1,6 +1,7 @@
 ﻿@using Semestralka.Models;
+@using Semestralka.DataObjects;
 
-@model AddUserModel
+@model UserModel
 
 @{
     ViewBag.Title = "Správa uživatelů";
@@ -10,43 +11,95 @@
 
 @if (!Html.ViewData.ModelState.IsValid)
 {
-    @Html.ValidationSummary(true, "", new { @class="error-message" })
+    @Html.ValidationSummary(true, "", new { @class = "error-message" })
 }
-else 
+else
 {
     <div id="login-content" class="model-content">
         <div class="modal-header">
             <h4 class="modal-title">
                 <i class="fa fa-user"></i>
-                Přidat uživatele
+                Uživatelé
             </h4>
         </div>
         <div class="modal-body">
+
+        @using (Html.BeginForm("Edit", "Users", FormMethod.Post))
+        {
+            @*All recipes in database*@
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>
+                            Uživatelské jméno
+                        </td>
+                        <td style="text-align: center">
+                            Správa uživatelů
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    @foreach (UserDO user in ViewBag.Users)
+                    {
+                        <tr>
+                            <td style="padding-right:50%">
+                                @user.Username
+                            </td>
+
+                            <td style="text-align: center">
+                                @if(@user.User_right)
+                                {
+                                    @Html.CheckBoxFor(m => m.User_right, new { @checked = "checked", @disabled = "disabled"})
+                                }
+                                else
+                                {
+                                    @Html.CheckBoxFor(m => m.User_right, new { @disabled = "disabled" })
+                                }                              
+                            </td>
+                            <td>
+                                @if (@user.Username != User.Identity.Name)
+                                {
+                                    <a href="@Url.Action("Remove", "Users", new { id = @user.UserID })">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+            <h4 class="modal-title">
+                <i class="fa fa-user"></i>
+                Přidat uživatele
+            </h4>
             @using (Html.BeginForm("Index", "Users", FormMethod.Post))
-            {    
+            {
                 <div class="form-group">
-                    @Html.TextBoxFor(m => m.username, new { placeholder = "Uživatelské jméno", @class = "form-control" })
-                    @Html.ValidationMessage("Username", new { @class="error-message" })
-                </div>
-                
-                <div class="form-group">
-                    @Html.PasswordFor(m => m.password, new { placeholder = "Heslo", @class = "form-control" })
-                    @Html.ValidationMessage("Password", new { @class="error-message" })
-                </div>
-                
-                <div class="form-group">
-                    @Html.TextBoxFor(m => m.firstname, new { placeholder = "Jméno", @class = "form-control" })
-                    @Html.ValidationMessage("Firstname", new { @class="error-message" })
+                    @Html.TextBoxFor(m => m.Username, new { placeholder = "Uživatelské jméno", @class = "form-control" })
+                    @Html.ValidationMessage("Username", new { @class = "error-message" })
                 </div>
 
                 <div class="form-group">
-                    @Html.TextBoxFor(m => m.lastname, new { placeholder = "Příjmení", @class = "form-control" })
-                    @Html.ValidationMessage("Lastname", new { @class="error-message" })
+                    @Html.PasswordFor(m => m.Password, new { placeholder = "Heslo", @class = "form-control" })
+                    @Html.ValidationMessage("Password", new { @class = "error-message" })
                 </div>
-               
-                    @*Label and textbox for user_right*@
-                    @Html.Label("Možnost správy uživatelů")
-                    @Html.CheckBoxFor(m => m.user_right, new { @style="float: right" })
+
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.Firstname, new { placeholder = "Jméno", @class = "form-control" })
+                    @Html.ValidationMessage("Firstname", new { @class = "error-message" })
+                </div>
+
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.Lastname, new { placeholder = "Příjmení", @class = "form-control" })
+                    @Html.ValidationMessage("Lastname", new { @class = "error-message" })
+                </div>
+
+                @*Label and textbox for user_right*@
+                @Html.Label("Možnost správy uživatelů")
+                @Html.CheckBoxFor(m => m.User_right, new { @style = "float: right" })
 
                 <div class="form-group">
                     <input type="submit" class="btn signin-btn" value="Přidat" />
