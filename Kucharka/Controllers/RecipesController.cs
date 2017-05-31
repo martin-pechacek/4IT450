@@ -47,41 +47,10 @@ namespace Semestralka.Controllers
         *  Method for inserting new recipe into database (without ingredients)
         **/
         [HttpPost]
-        public async Task<ActionResult> Index(Recipe recipe, string add, RecipeModel model, HttpPostedFileBase file)
+        public async Task<ActionResult> Index(Recipe recipe, string add, RecipeModel model)
         {
             await Task.Delay(0);
 
-            if(Request.Files.Count > 0)
-            {
-                var filee = Request.Files[0];
-
-                
-
-                Account account = new Account(
-                "dn9v4khef",
-                "388956466687414",
-                "xjqi1fBmKrMRvncSn9Y_AA25V2E");
-
-                string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-                Directory.CreateDirectory(tempDirectory);
-
-                var fileName = Path.GetFileName(filee.FileName);
-                var path = Path.Combine(tempDirectory, fileName);
-
-                file.SaveAs(path);
-
-                Cloudinary cloudinary = new Cloudinary(account);
-
-                var uploadParams = new ImageUploadParams()
-                {
-
-                    File = new FileDescription(@path)
-                };
-                var uploadResult = cloudinary.Upload(uploadParams);
-            }
-
-
-            /*
             List<RecipeDO> recipes = await RecipeDO.GetRecipesAsync();
 
             List<CategoryDO> categories = await CategoryDO.GetCategoriesAsync();
@@ -110,6 +79,13 @@ namespace Semestralka.Controllers
                         return RedirectToAction("Index", "Recipes", new { error = true });
                     }
                 }
+
+                CloudinaryOperations upload = new CloudinaryOperations();
+
+                var file = Request.Files[0];
+
+                upload.Upload(file, recipe.id_recipe);
+
             }
             catch(Exception ex)
             { 
@@ -123,7 +99,7 @@ namespace Semestralka.Controllers
                 }
 
                 return View();
-            }*/
+            }
             return RedirectToAction("Recipe", "Recipes", new { id = recipe.id_recipe });
         }
 

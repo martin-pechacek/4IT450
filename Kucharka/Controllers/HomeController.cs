@@ -1,4 +1,5 @@
 ﻿using Semestralka.DataObjects;
+using Semestralka.Other;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,15 @@ namespace Semestralka.Controllers
         public async Task<ActionResult> Index()
         {
             List<RecipeDO> recipes = await RecipeDO.GetRecipesAsync();
+
+            List<string> imagesUrls = new List<string>();
+
+            CloudinaryOperations cloudinary = new CloudinaryOperations();
+
+            for(int i = 0; i < recipes.Count; i++)
+            {
+                recipes[i].ImageUrl = cloudinary.getImageUrl(recipes[i].RecipeID);
+            }
 
             ViewBag.Recipes = recipes;
 

@@ -10,101 +10,107 @@
 
 
 @*Recipe*@
-@if(User.Identity.IsAuthenticated)
-{
-    using (Html.BeginForm("Edit", "Recipes", FormMethod.Post))
-    {
-    @Html.HiddenFor(m => m.RecipeModel.Id_recipe);
-    
-    <div id="recipe-name">
-        @Html.TextBoxFor(m => m.RecipeModel.Name_recipe, new { Value = @Model.RecipeModel.Name_recipe, maxlength = 1024, @class="form-control" })
-    </div>
-    
-    <div id="recipe-detail-category">
-        @ViewBag.Category.name_category
-    </div>
-    
-    @*Ingredients*@
-    if (Enumerable.Count(ViewBag.Ingredients) != 0)
-    {    
-        for (var i = 0; i < Enumerable.Count(ViewBag.Ingredients); i++)
-        {
-        <div class="recipe-detail-ingredients">
-            @ViewBag.Ingredients[i].Amount @ViewBag.IngredientUnits[i]  @ViewBag.IngredientsNames[i] 
-            <a href="@Url.Action("RemoveRecipeIngredient", "Recipes", new { ingredientID = ViewBag.Ingredients[i].IngredientID, recipeID = @Model.RecipeModel.Id_recipe })">
-                <span class="glyphicon glyphicon-remove"></span>
-            </a>
-        </div>        
-        }
-    }
-    
 
-    <div id="recipe-detail-instructions">
-        @Html.TextAreaFor(m => m.RecipeModel.Instructions, new { Value = @Model.RecipeModel.Instructions, maxlength = 2048, @style = "width: 75%; height: 250px" })
-    </div>
-    
-    <input type="submit" class="btn signin-btn" value="Uložit">
-    }
-    
-    <div id="add-ingredient-content">
-        <div class="modal-header">
-            <h4 class="modal-title">
-                <i class="fa fa-plus-circle"></i>
-                Přidat ingredienci
-            </h4>
-        </div>
-        <div class="modal-body">
-          @using (Html.BeginForm("Recipe", "Recipes", FormMethod.Post))
-          {
+<div id="page-content">
+
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        using (Html.BeginForm("Edit", "Recipes", FormMethod.Post))
+        {
             @Html.HiddenFor(m => m.RecipeModel.Id_recipe);
-            @Html.HiddenFor(m => m.RecipeModel.Id_category);
-              
-              @*Dropdown for ingredients *@
-              <div id="recipe-detail-ingredient-dropdown">
-                  @Html.DropDownListFor(m => m.IngredientModel.Id_ingredient, (List<SelectListItem>)ViewBag.IngredientsDropDown,
+
+        <div id="recipe-name">
+            @Html.TextBoxFor(m => m.RecipeModel.Name_recipe, new { Value = @Model.RecipeModel.Name_recipe, maxlength = 1024, @class = "form-control" })
+        </div>
+
+        <div id="recipe-detail-category">
+            @ViewBag.Category.name_category
+        </div>
+
+        @*Ingredients*@
+            if (Enumerable.Count(ViewBag.Ingredients) != 0)
+            {
+                for (var i = 0; i < Enumerable.Count(ViewBag.Ingredients); i++)
+                {
+                    <div class="recipe-detail-ingredients">
+                        @ViewBag.Ingredients[i].Amount @ViewBag.IngredientUnits[i]  @ViewBag.IngredientsNames[i]
+                        <a href="@Url.Action("RemoveRecipeIngredient", "Recipes", new { ingredientID = ViewBag.Ingredients[i].IngredientID, recipeID = @Model.RecipeModel.Id_recipe })">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </div>
+                }
+            }
+
+
+            <div id="recipe-detail-instructions">
+                @Html.TextAreaFor(m => m.RecipeModel.Instructions, new { Value = @Model.RecipeModel.Instructions, maxlength = 2048, @style = "width: 75%; height: 250px" })
+            </div>
+
+            <input type="submit" class="btn signin-btn" value="Uložit">
+        }
+
+        <div id="add-ingredient-content" style="width: 75%">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <i class="fa fa-plus-circle"></i>
+                    Přidat ingredienci
+                </h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Recipe", "Recipes", FormMethod.Post))
+                {
+                    @Html.HiddenFor(m => m.RecipeModel.Id_recipe);
+                    @Html.HiddenFor(m => m.RecipeModel.Id_category);
+
+                    @*Dropdown for ingredients *@
+                    <div id="recipe-detail-ingredient-dropdown">
+                        @Html.DropDownListFor(m => m.IngredientModel.Id_ingredient, (List<SelectListItem>)ViewBag.IngredientsDropDown,
                         new
                         {
                             @class = "form-control dropdown",
                             onchange = "$(this).closest('form').submit();",
                         })
 
-                  @Html.TextBoxFor(m => m.RecipeIngredient.Amount, new { @type = "number", style="width: 15%" })
-                  <span id="recipe-detail-unit">@ViewBag.Unit</span>
-              </div>
-              
-              <input type="submit" value="Přidat" class="btn signin-btn" name="Add" />
-          }
+                        @Html.TextBoxFor(m => m.RecipeIngredient.Amount, new { @type = "number", style = "width: 15%" })
+                        <span id="recipe-detail-unit">@ViewBag.Unit</span>
+                    </div>
+
+                    <input type="submit" value="Přidat" class="btn signin-btn" name="Add" style="margin-left: 14%" />
+                }
+            </div>
         </div>
-    </div>
-    } 
+    }
     else
     {
         <div id="recipe-name">
             @Model.RecipeModel.Name_recipe
         </div>
-    
+
         <div id="recipe-detail-category">
             @ViewBag.Category.name_category
         </div>
-    
-    
+
+
         @*Ingredients*@
         if (Enumerable.Count(ViewBag.Ingredients) != 0)
         {
 
-        <table class="table">
-            <tbody>
-                @for (var i = 0; i < Enumerable.Count(ViewBag.Ingredients); i++)
-            {
-                    <tr>
-                        <td style="padding-top: 0px; padding-bottom: 2px;">@ViewBag.Ingredients[i].Amount @ViewBag.IngredientUnits[i] @ViewBag.IngredientsNames[i]</td>
-                    </tr>
-            }
-            </tbody>
-        </table>
-    
-        <pre>
+            <table class="table">
+                <tbody>
+                    @for (var i = 0; i < Enumerable.Count(ViewBag.Ingredients); i++)
+                    {
+                        <tr>
+                            <td style="padding-top: 0px; padding-bottom: 2px;">@ViewBag.Ingredients[i].Amount @ViewBag.IngredientUnits[i] @ViewBag.IngredientsNames[i]</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <pre>
             @Model.RecipeModel.Instructions
         </pre>
+        }
     }
-}
+
+    </div>

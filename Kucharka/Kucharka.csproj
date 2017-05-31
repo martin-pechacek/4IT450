@@ -214,6 +214,7 @@
     <Compile Include="Models\RecipeDetailModel.cs" />
     <Compile Include="Models\RecipeIngredientModel.cs" />
     <Compile Include="Models\RecipeModel.cs" />
+    <Compile Include="Other\CloudinaryOperations.cs" />
     <Compile Include="Other\IdentityUser.cs" />
     <Compile Include="Other\IngredientsOperations.cs" />
     <Compile Include="Other\UserStore.cs" />

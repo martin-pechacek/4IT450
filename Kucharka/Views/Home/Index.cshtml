@@ -1,5 +1,6 @@
 ﻿@using Semestralka.Models;
 @using Semestralka.DataObjects;
+@using Semestralka.Other;
 
 @model RecipeModel
 
@@ -18,7 +19,7 @@
 
                                 <div class="single-team-member">
                                     <div class="team-member-img">
-                                        <img src="http://placehold.it/240x260" alt="recipe image">
+                                        <img src=@recipe.ImageUrl alt="recipe image">
                                     </div>
                                     <div class="team-member-name">
                                         <p>

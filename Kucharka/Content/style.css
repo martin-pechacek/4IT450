@@ -96,6 +96,10 @@ img{
   z-index:99999; /* makes sure it stays on top */ 
 }
 
+#page-content {
+    margin-left: 20%;
+}
+
 #status {
   width:200px;
   height:200px;
